@@ -3,28 +3,20 @@ import axios from 'axios';
 
 // Axios Interceptor Instance
 const axiosInstance = axios.create({
-	// baseURL: process.env.BASE_URL
-	baseURL: 'http://138.197.210.74:8880',
-	timeout: 10000,
-	// headers: {
-	// 	'Accept-Language': 'pt-BR',
-	// 	'Content-Type': 'application/xml',
-	// }
+	baseURL: process.env.BASE_URL,
+	//baseURL: 'http://138.197.210.74:8880',
+	timeout: 10000, //10secunds
 })
 
 axiosInstance.interceptors.request.use((config) => {
-	
-	//console.log(JSON.stringify(config, null, '\t'));
 	
 	const accessToken = localStorage.getItem('token');
 	const language = localStorage.getItem('language') || 'pt-Br';
 	if (accessToken) {
 		config.headers['Authorization'] = `Bearer ${accessToken}`;
 	}
-	// config.headers['Accept-Language'] = language;
-	// config.headers['Content-Type'] = 'application/json';
-	// console.log("Axios Intecepter Request");
-	// console.log(JSON.stringify(config, null, '\t'));
+	config.headers['Accept-Language'] = language;
+	config.headers['Content-Type'] = 'application/json';
 
 	return config;
 },
