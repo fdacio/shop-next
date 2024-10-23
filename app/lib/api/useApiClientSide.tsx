@@ -1,8 +1,7 @@
-"use client"
+'use client'
 import { useState, useEffect, useCallback } from 'react';
-import axiosInstance from './api';
-import { Error } from './definitions';
-import ErrorNext from 'next/error';
+import axiosInstance from './axiosInstance';
+import { ApiError } from '../definitions';
 
 export enum ApiMethod {
     "GET", "POST", "DELETE", "PATCH", "PUT"
@@ -13,9 +12,9 @@ export const useApi = <T = unknown>(method: ApiMethod, url: string, options = {}
 
     if (method == ApiMethod.GET) {
 
-        const [data, setData] = useState<T | null>(null);
+        const [data, setData] = useState<T | undefined>(undefined);
         const [loading, setLoading] = useState(true);
-        const [error, setError] = useState<Error | null>(null);
+        const [error, setError] = useState<ApiError | null>(null);
 
         useEffect(() => {
 
@@ -45,9 +44,9 @@ export const useApi = <T = unknown>(method: ApiMethod, url: string, options = {}
 
     if (method == ApiMethod.POST) {
 
-        const [data, setData] = useState<T | null>(null);
+        const [data, setData] = useState<T | undefined>(undefined);
         const [loading, setLoading] = useState(false);
-        const [error, setError] = useState<Error | null>(null);
+        const [error, setError] = useState<ApiError | null>(null);
 
 
         const callback = useCallback(async (requestData: any) => {

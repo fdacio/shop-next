@@ -1,13 +1,18 @@
 // This file contains type definitions for your data.
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
+
+import { User } from "next-auth";
+
 // However, these types are generated automatically if you're using an ORM such as Prisma.
-export type User = {
+export interface ApiUser {
   id: string;
   nome: string;
   username: string,
   email: string;
+  password: string;
   rules: string[];
+  emailVerified:Date;
 };
 
 export type Token = {
@@ -23,7 +28,7 @@ export type Product = {
   foto: string;
 };
 
-export type Error = {
+export type ApiError = {
   status: Number,
   message: string
 }

@@ -1,4 +1,3 @@
-"use client"
 import axios from 'axios';
 
 // Axios Interceptor Instance
@@ -9,13 +8,11 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-	
-	const accessToken = localStorage.getItem('token');
-	const language = localStorage.getItem('language') || 'pt-Br';
+	let accessToken = undefined; //Aqui pegar possivelmente por cookies 
 	if (accessToken) {
 		config.headers['Authorization'] = `Bearer ${accessToken}`;
 	}
-	config.headers['Accept-Language'] = language;
+	config.headers['Accept-Language'] = 'pt-Br';
 	config.headers['Content-Type'] = 'application/json';
 
 	return config;
@@ -29,7 +26,7 @@ axiosInstance.interceptors.response.use((response) => response,
 		const originalRequest = error.config;
 		if (error.response.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
-			const refreshToken = localStorage.setItem('token', "");
+			//const refreshToken = localStorage.setItem('token', "");
 			//const refreshToken = localStorage.getItem('refreshToken');
 			try {
 				// const { data } = await axiosInstance.post('/auth/refresh-token', { token: refreshToken });

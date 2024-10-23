@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { roboto } from '@/app/ui/fonts';
 import {
 	AtSymbolIcon,
@@ -8,15 +8,17 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
-import { useApi, ApiMethod } from '@/app/lib/useApi'
-import { Token } from '../lib/definitions';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
+import { useActionState } from 'react';
+import { authenticate } from '@/app/lib/actions';
 
 export default function LoginForm() {
 
-	const router = useRouter();
+	const [errorMessage, formAction, isPending] = useActionState(
+		authenticate,
+		undefined,
+	  );
+
+/* 	const router = useRouter();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -45,10 +47,10 @@ export default function LoginForm() {
 		if (token != null) router.push('/');
 
 	}
-
+ */
 
 	return (
-		<form className="space-y-3">
+		<form action={formAction} className="space-y-3">
 			<div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
 				<h1 className={`${roboto.className} mb-3 text-2xl`}>
 					Login
@@ -69,8 +71,6 @@ export default function LoginForm() {
 								name="email"
 								placeholder="Informe seu email ou username"
 								required
-								onChange={(event) => setEmail(event.target.value)}
-								value={email}
 							/>
 							<AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
 						</div>
@@ -91,16 +91,14 @@ export default function LoginForm() {
 								placeholder="Informe sua senha"
 								required
 								minLength={6}
-								onChange={(event) => setPassword(event.target.value)}
-								value={password}
 							/>
 							<KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
 						</div>
 					</div>
 				</div>
-				<Button className="mt-4 w-full bg-color-shop text-color-shop" onClick={handlerLogin} disabled={loading}>
+				<Button className="mt-4 w-full bg-color-shop text-color-shop" disabled={isPending}>
 					{
-						(!loading)
+						(!isPending)
 							?
 							<>
 								Log in
@@ -113,9 +111,10 @@ export default function LoginForm() {
 					}
 				</Button>
 			</div>
-			{(error) &&
+			{(errorMessage) &&
 				<div className='flex box-error rounded-lg bg-gray-50 p-2'>
-					<p>{error.message}</p>
+					<ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+					<p>{errorMessage}</p>
 				</div>
 			}
 		</form>
