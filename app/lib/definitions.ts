@@ -5,19 +5,24 @@
 import { User } from "next-auth";
 
 // However, these types are generated automatically if you're using an ORM such as Prisma.
-export interface ApiUser {
+export interface ApiUser extends User {
   id: string;
   nome: string;
   username: string,
   email: string;
   password: string;
-  rules: string[];
-  emailVerified:Date;
+  rules: Rule[];
+  emailVerified: Date
 };
+
+export type Rule = {
+  id: string,
+  nome: string
+}
 
 export type Token = {
   token: string;
-  expired: number
+  expired: Date
 }
 
 export type Product = {

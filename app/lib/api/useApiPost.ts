@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance";
 
 export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) => {
 
-    var data:T | undefined;
+    var data : T | undefined;
     var error: ApiError | undefined;
     var loading: boolean = false;
 

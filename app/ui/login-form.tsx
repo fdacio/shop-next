@@ -1,56 +1,30 @@
-'use client';
+'use client'
 import { roboto } from '@/app/ui/fonts';
+import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import {
 	AtSymbolIcon,
-	KeyIcon,
 	ExclamationCircleIcon,
-
+	KeyIcon,
 } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { AuthContext } from '../context/AuthContext';
 import { Button } from './button';
-import { useActionState } from 'react';
-import { authenticate } from '@/app/lib/actions';
 
 export default function LoginForm() {
 
-	const [errorMessage, formAction, isPending] = useActionState(
-		authenticate,
-		undefined,
-	  );
+	const { register, handleSubmit } = useForm();
+	const { signIn, error } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(false);
 
-/* 	const router = useRouter();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-
-	const { callback: doLogin, data: token, loading, error } = useApi<Token>(ApiMethod.POST, "/auth/login");
-	
-	const handlerLogin = async (event: any) => {
-		
-		event.preventDefault();
-
-		if (doLogin == null) return;
-
-		type Login = {
-			'username': string,
-			'password': string
-		}
-
-		let login: Login = {
-			username: email,
-			password: password
-		};
-
-		await doLogin(login);
-
-		localStorage.setItem("token", (token != null) ? token.token : "");
-		
-		if (token != null) router.push('/');
-
+	async function handleSignIn(data: any) {
+		setIsLoading(true);
+		const response = await signIn(data);
+		setIsLoading(false);
 	}
- */
 
 	return (
-		<form action={formAction} className="space-y-3">
+		<form onSubmit={handleSubmit(handleSignIn)} className="space-y-3">
 			<div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
 				<h1 className={`${roboto.className} mb-3 text-2xl`}>
 					Login
@@ -65,6 +39,7 @@ export default function LoginForm() {
 						</label>
 						<div className="relative">
 							<input
+								{...register('email')}
 								className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
 								id="email"
 								type="email"
@@ -84,6 +59,7 @@ export default function LoginForm() {
 						</label>
 						<div className="relative">
 							<input
+								{...register('password')}
 								className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
 								id="password"
 								type="password"
@@ -96,9 +72,9 @@ export default function LoginForm() {
 						</div>
 					</div>
 				</div>
-				<Button className="mt-4 w-full bg-color-shop text-color-shop" disabled={isPending}>
+				<Button className="mt-4 w-full bg-color-shop text-color-shop" disabled={isLoading}>
 					{
-						(!isPending)
+						(!isLoading)
 							?
 							<>
 								Log in
@@ -111,10 +87,10 @@ export default function LoginForm() {
 					}
 				</Button>
 			</div>
-			{(errorMessage) &&
+			{(error) &&
 				<div className='flex box-error rounded-lg bg-gray-50 p-2'>
 					<ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-					<p>{errorMessage}</p>
+					<p>{error.message}</p>
 				</div>
 			}
 		</form>

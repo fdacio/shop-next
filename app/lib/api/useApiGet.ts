@@ -1,5 +1,4 @@
-"use server"
-import { any, unknown } from "zod";
+"use client"
 import { ApiError } from "../definitions";
 import axiosInstance from "./axiosInstance";
 
@@ -13,7 +12,7 @@ export const useApiGet = async <T = unknown>(url: string, options = {}) => {
     const handlerGet = async () => {
 
         try {
-            console.log(url);
+
             const response = await axiosInstance.get(url, options);
             if (response.data.hasOwnProperty('content') != undefined) {
                 data = (response.data.content);
