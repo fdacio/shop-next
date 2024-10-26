@@ -1,14 +1,14 @@
-import { ApiError } from "../definitions";
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../axiosInstance";
+import { ApiErrorType } from "../../types/types";
 
 export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) => {
 
-    var data : T | undefined;
-    var error: ApiError | undefined;
-    var loading: boolean = false;
+    let data: T | undefined;
+    let loading: boolean = false;
+    let error: ApiErrorType | any;
 
     const handlerPost = async (requestData: any) => {
-        
+
         loading = true;
 
         try {
@@ -16,11 +16,15 @@ export const useApiPost = async <T = unknown>(url: string, dataRequest: any, opt
             data = (response.data);
 
         } catch (err: any) {
-            let e : ApiError = {
+            let e = {
                 status: err.response?.status,
                 message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
             }
-            error = e;
+            error = {
+                status : e.status,
+                message : e.message
+            }
+            //throw new ApiError(e.status, e.message);
         } finally {
             loading = (false);
         }
@@ -28,5 +32,5 @@ export const useApiPost = async <T = unknown>(url: string, dataRequest: any, opt
 
     await handlerPost(dataRequest);
 
-    return {data, loading, error };
+    return { data, loading, error };
 }

@@ -1,5 +1,6 @@
-'use client'
 import axios from 'axios';
+import { parseCookies, setCookie } from 'nookies';
+
 const axiosInstance = axios.create({
 	//baseURL: process.env.BASE_URL,
 	baseURL: 'http://138.197.210.74:8880',
@@ -7,7 +8,7 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-	let accessToken = undefined; //Aqui pegar possivelmente por cookies 
+	const { 'shop.token': accessToken } = parseCookies();
 	if (accessToken) {
 		config.headers['Authorization'] = `Bearer ${accessToken}`;
 	}

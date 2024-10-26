@@ -1,20 +1,18 @@
-"use client"
-import { ApiError } from "../definitions";
-import axiosInstance from "./axiosInstance";
-
+import axiosInstance from "../axiosInstance";
+import { ApiErrorType } from "../../types/types";
 
 export const useApiGet = async <T = unknown>(url: string, options = {}) => {
 
-    var data: T = <T>{};
-    var error: ApiError = <ApiError>{};
-    var loading: boolean = true;
-
+    let data: T = <T>{};
+    let loading: boolean = true;
+    let error: ApiErrorType | any;
+    
     const handlerGet = async () => {
 
         try {
 
             const response = await axiosInstance.get(url, options);
-            if (response.data.hasOwnProperty('content') != undefined) {
+            if (response.data.hasOwnProperty('content')) {
                 data = (response.data.content);
             }
             else {
@@ -22,11 +20,14 @@ export const useApiGet = async <T = unknown>(url: string, options = {}) => {
             }        
         }       
         catch (err: any) {
-            let e : ApiError = {
+            let e  = {
                 status: err.response?.status,
                 message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
             }
-            error = e;
+            error = {
+                status : e.status,
+                message : e.message
+            }
         } finally {
             loading = false;
         }

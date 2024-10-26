@@ -1,17 +1,17 @@
 'use client'
-import { createContext, useEffect, useState } from "react";
-import { setCookie, parseCookies } from 'nookies';
-import { useApiPost } from "../lib/api/useApiPost";
-import { ApiError, ApiUser, Token } from "../lib/definitions";
-import { redirectSignOut, redirectSignIn } from '../actions';
-import axiosInstance from "../lib/api/axiosInstance";
+import { parseCookies, setCookie } from 'nookies';
+import { createContext } from "react";
+import { redirectSignIn, redirectSignOut } from '../auth-redirects';
+import { useApiPost } from "../lib/api/requests/ssr/useApiPost";
+import { ApiUser, Token } from "../lib/api/types/types";
+import { throws } from 'assert';
+import { ApiError } from '../lib/api/exceptions/ApiError';
 
 
 type AuthContextType = {
-    signIn: (data: SignInData) => Promise<boolean>,
+    signIn: (data: SignInData) => Promise<void>,
     signOut: () => Promise<void>,
-    authentocatedUser: () => Promise<ApiUser | undefined>,
-    error: ApiError | null
+    authenticatedUser: () => Promise<ApiUser | undefined>,
 }
 
 type SignInData = {
@@ -23,10 +23,6 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: any) {
 
-    const [user, setUser] = useState<ApiUser | null>(null);
-    const [error, setError] = useState<ApiError | null>(null);
-
-
     async function signIn({ email, password }: SignInData) {
 
         let loginData = {
@@ -34,33 +30,25 @@ export function AuthProvider({ children }: any) {
             "password": password
         }
 
-        const { data: token, error: errorGetToken } = await useApiPost<Token>("/auth/login", loginData);
+        const { data: token, error : errorLogin } = await useApiPost<Token>("/auth/login", loginData);
 
+        if (errorLogin) {
+            throw new ApiError(errorLogin.status, errorLogin.message)
+        }
 
         if (token) {
             setCookie(undefined, 'shop.token', token?.token, {
                 expires: token?.expired
             });
-            axiosInstance.defaults.headers['Authorization'] = `Bearer ${token.token}`;
-        }
-        if (errorGetToken) {
-            setError(errorGetToken);
-            return false;
+            //axiosInstance.defaults.headers['Authorization'] = `Bearer ${token.token}`;
         }
 
-        const { data: user, loading: loadingUser, error: errorGetUser } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
+        const { data: user, error : errorGetUser } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
 
-        if (errorGetUser) {
-            setError(errorGetUser);
-            return false;
-        }
 
         if (user) {
             await redirectSignIn(user);
-
         }
-
-        return true;
 
     }
 
@@ -69,24 +57,23 @@ export function AuthProvider({ children }: any) {
         await redirectSignOut();
     }
 
-    async function authentocatedUser() {
-        
+    async function authenticatedUser() {
+
         const { 'shop.token': token } = parseCookies();
-        
+
         if (!token) return;
 
-        const { data: user, error: errorGetUser } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
-        
-        if(errorGetUser) {
-            setError(errorGetUser);
-            return;
-        
+        const { data: user, error } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
+
+        if (error) {
+            throw new ApiError(error.status, error.message)
         }
+
         return user
     }
 
     return (
-        <AuthContext.Provider value={{ signIn, signOut, authentocatedUser, error }}>
+        <AuthContext.Provider value={{ signIn, signOut, authenticatedUser }}>
             {children}
         </AuthContext.Provider>
     )

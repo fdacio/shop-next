@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 
 export default function SideNav() {
   
-  const { signOut, isAuthenticated, user } = useContext(AuthContext);
+  const { signOut, authenticatedUser} = useContext(AuthContext);
   const { handleSubmit } = useForm();
 
   const handleSignOut = async () => {

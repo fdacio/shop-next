@@ -10,17 +10,24 @@ import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from '../context/AuthContext';
 import { Button } from './button';
+import { ApiError } from '../lib/api/exceptions/ApiError';
 
 export default function LoginForm() {
 
 	const { register, handleSubmit } = useForm();
-	const { signIn, error } = useContext(AuthContext);
+	const { signIn } = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
-
+	const [error, setError] = useState<ApiError | null>(null);
+	
 	async function handleSignIn(data: any) {
 		setIsLoading(true);
-		const response = await signIn(data);
-		setIsLoading(false);
+		try {
+			const response = await signIn(data);
+		} catch (err: any) {
+			setError(err);
+		} finally {
+			setIsLoading(false);
+		}
 	}
 
 	return (

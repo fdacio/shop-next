@@ -6,6 +6,8 @@ import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  TagIcon,
+  UsersIcon,
 } from '@heroicons/react/24/outline';
 
 // Map of links to display in the side navigation.
@@ -13,11 +15,25 @@ import {
 const links = [
   { name: 'Home', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'Invoices',
-    href: '/dashboard/invoices',
+    name: 'Products',
+    href: '/dashboard/products',
+    icon: TagIcon,
+  },
+  {
+    name: 'Orders',
+    href: '/dashboard/orders',
     icon: DocumentDuplicateIcon,
   },
-  { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
+  { 
+    name: 'Customers', 
+    href: '/dashboard/customers', 
+    icon: UserGroupIcon 
+  },
+  { 
+    name: 'Users', 
+    href: '/dashboard/users', 
+    icon: UsersIcon 
+  },
 ];
 
 export default function NavLinks() {

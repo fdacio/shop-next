@@ -1,7 +1,6 @@
 'use server'
 import { redirect, RedirectType } from 'next/navigation'
-import { ApiUser } from './lib/definitions';
-
+import { ApiUser } from './lib/api/types/types';
 
 export async function redirectSignIn(user : ApiUser) {
 
@@ -16,7 +15,7 @@ export async function redirectSignIn(user : ApiUser) {
             redirect('/', RedirectType.push);
         }
     })
-    return;
+
 }
 
 export async function redirectSignOut() {

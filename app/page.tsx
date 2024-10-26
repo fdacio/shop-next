@@ -2,32 +2,39 @@
 import ProductsHome from '@/app/ui/products/products-home';
 import ShopLogo from '@/app/ui/shop-logo';
 import ShopLogoBlack from '@/app/ui/shop-logo-black';
+import ApiMessageErro from './ui/api-messge-error';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from './context/AuthContext';
-import { ApiUser } from './lib/definitions';
+import { ApiUser } from './lib/api/types/types';
+import { ApiError } from './lib/api/exceptions/ApiError';
 
 export default function Home() {
 
   const { handleSubmit } = useForm();
-  const { signOut, authentocatedUser } = useContext(AuthContext);
-  const [authenticatedUser, setAuthenticatedUser] = useState<ApiUser | undefined>(undefined);
+  const { signOut, authenticatedUser } = useContext(AuthContext);
+  const [authUser, setAuthUser] = useState<ApiUser | undefined>(undefined);
+  const [apiError, setApiError] = useState<ApiError | undefined>(undefined);
 
   const handleSignOut = async () => {
     await signOut();
   }
 
   useEffect(() => {
-    console.log("useEffect in Home");
+
     const handleAuthenticatedUser = async () => {
-      const user  = await authentocatedUser();
-      if (user) setAuthenticatedUser(user);
+      try {
+        const user = await authenticatedUser();
+        if (user) setAuthUser(user);
+      } catch (err: any) {
+        setApiError(err);
+      }
     }
     handleAuthenticatedUser();
 
-  },[])
+  }, [])
 
 
 
@@ -38,9 +45,9 @@ export default function Home() {
         <ShopLogo />
 
         {
-          (authenticatedUser) ?
+          (authUser) ?
             <div className="flex items-center gap-5 md:self-end">
-              <span className='text-color-shop'>{authenticatedUser?.nome}</span>
+              <span className='text-color-shop'>{authUser?.nome}</span>
               <form onSubmit={handleSubmit(handleSignOut)}>
                 <button className='p-2 m-1 rounded-md bg-color-shop text-color-shop '>Sair</button>
               </form>
@@ -59,6 +66,7 @@ export default function Home() {
         <div className="flex flex-col justify-start items-center  gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
           <ShopLogoBlack />
         </div>
+        <ApiMessageErro message={apiError?.message}></ApiMessageErro>
         <ProductsHome />
       </div>
     </main>
