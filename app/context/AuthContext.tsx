@@ -69,6 +69,7 @@ export function AuthProvider({ children }: any) {
 
         if (error) {
             destroyCookie(undefined, 'shop.token');
+            throw new ApiError(error.status, error.message)
         }
 
         return user

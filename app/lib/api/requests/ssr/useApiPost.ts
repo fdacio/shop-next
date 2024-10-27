@@ -1,5 +1,6 @@
 import axiosInstance from "../axiosInstance";
 import { ApiErrorType } from "../../types/entities";
+import { ApiAuthError } from "../../exceptions/ApiAuthError";
 
 export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) => {
 
@@ -16,14 +17,20 @@ export const useApiPost = async <T = unknown>(url: string, dataRequest: any, opt
             data = (response.data);
 
         } catch (err: any) {
-            let e = {
-                status: err.response?.status,
-                message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
+            
+            if (err.name === 'AxiosError') {
+                 error = {
+                    status : err.response?.status,
+                    message : err.message
+                }
+            } else {
+                error = {
+                    status :  err.response?.status,
+                    message : (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
+                }
+
             }
-            error = {
-                status : e.status,
-                message : e.message
-            }
+
         } finally {
             loading = (false);
         }

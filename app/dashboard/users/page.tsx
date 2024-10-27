@@ -16,7 +16,7 @@ export default function Page() {
             <ApiMessageResponse status={error?.status} message={error?.message} />
                 {users?.map((user: ApiUser) => {
                     return (
-                        <li key={user.id}>
+                        <li key={user.id.toString()}>
                             {user.nome} | {user.username} | {user.rules.map((r) => {return <>{r.nome + " - "}</>})}
                         </li>
                     )

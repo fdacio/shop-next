@@ -2,8 +2,8 @@ import axios from 'axios';
 import { parseCookies, setCookie } from 'nookies';
 
 const axiosInstance = axios.create({
-	//baseURL: process.env.BASE_URL,
-	baseURL: 'http://138.197.210.74:8880',
+	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+	//baseURL: 'http://138.197.210.74:8880',
 	timeout: 10000, //10secunds
 })
 

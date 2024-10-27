@@ -20,14 +20,18 @@ export const useApiGet = async <T = unknown>(url: string, options = {}) => {
             }        
         }       
         catch (err: any) {
-            let e  = {
-                status: err.response?.status,
-                message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
-            }
-            error = {
-                status : e.status,
-                message : e.message
-            }
+            if (err.name === 'AxiosError') {
+                error = {
+                   status : err.response?.status,
+                   message : err.message
+               }
+           } else {
+               error = {
+                   status :  err.response?.status,
+                   message : (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
+               }
+
+           }
         } finally {
             loading = false;
         }
