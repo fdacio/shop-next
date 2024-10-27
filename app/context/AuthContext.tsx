@@ -1,10 +1,9 @@
 'use client'
-import { parseCookies, setCookie } from 'nookies';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { createContext } from "react";
 import { redirectSignIn, redirectSignOut } from '../auth-redirects';
 import { useApiPost } from "../lib/api/requests/ssr/useApiPost";
-import { ApiUser, Token } from "../lib/api/types/types";
-import { throws } from 'assert';
+import { ApiUser, Token } from "../lib/api/types/entities";
 import { ApiError } from '../lib/api/exceptions/ApiError';
 
 
@@ -24,6 +23,8 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthProvider({ children }: any) {
 
     async function signIn({ email, password }: SignInData) {
+
+        destroyCookie(undefined, 'shop.token');
 
         let loginData = {
             "username": email,
@@ -53,7 +54,7 @@ export function AuthProvider({ children }: any) {
     }
 
     async function signOut() {
-        setCookie(undefined, 'shop.token', "");
+        destroyCookie(undefined, 'shop.token');
         await redirectSignOut();
     }
 
@@ -66,7 +67,7 @@ export function AuthProvider({ children }: any) {
         const { data: user, error } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
 
         if (error) {
-            throw new ApiError(error.status, error.message)
+            destroyCookie(undefined, 'shop.token');
         }
 
         return user

@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AuthContext } from './context/AuthContext';
-import { ApiUser } from './lib/api/types/types';
+import { ApiUser } from './lib/api/types/entities';
 import { ApiError } from './lib/api/exceptions/ApiError';
 
 export default function Home() {

@@ -1,5 +1,5 @@
 import axiosInstance from "../axiosInstance";
-import { ApiErrorType } from "../../types/types";
+import { ApiErrorType } from "../../types/entities";
 
 export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) => {
 
@@ -24,7 +24,6 @@ export const useApiPost = async <T = unknown>(url: string, dataRequest: any, opt
                 status : e.status,
                 message : e.message
             }
-            //throw new ApiError(e.status, e.message);
         } finally {
             loading = (false);
         }

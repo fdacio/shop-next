@@ -1,13 +1,11 @@
 "use client"
 import { useApiGet } from '@/app/lib/api/requests/csr/useApiGet';
-import { Product } from "@/app/lib/api/types/types";
+import { Product } from "@/app/lib/api/types/entities";
 import styles from "@/app/ui/products/products.module.css";
 import ProductsCardHome from "./products-card-home";
 export default function ProductsHome() {
 
     const { data : products, loading, error } = useApiGet<Product[] | undefined>("/product/all/home");
-
-    console.log(products);
 
     return (
         <div className={styles.container}>

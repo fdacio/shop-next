@@ -1,5 +1,5 @@
 import axiosInstance from "../axiosInstance";
-import { ApiErrorType } from "../../types/types";
+import { ApiErrorType } from "../../types/entities";
 
 export const useApiGet = async <T = unknown>(url: string, options = {}) => {
 

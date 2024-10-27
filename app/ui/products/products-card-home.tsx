@@ -1,4 +1,4 @@
-import { Product } from "@/app/lib/api/types/types";
+import { Product } from "@/app/lib/api/types/entities";
 import styles from "@/app/ui/products/products.module.css";
 import Image from "next/image";
 

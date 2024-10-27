@@ -21,6 +21,7 @@ export default function LoginForm() {
 	
 	async function handleSignIn(data: any) {
 		setIsLoading(true);
+		setError(null);
 		try {
 			const response = await signIn(data);
 		} catch (err: any) {

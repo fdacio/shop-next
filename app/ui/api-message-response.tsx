@@ -1,4 +1,4 @@
-export default function ApiMessageErro({ message } : { message : string | undefined}) {
+export default function ApiMessageResponse({ status, message } : { status : Number | undefined , message : string | undefined}) {
 
 
     return (

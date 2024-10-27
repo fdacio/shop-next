@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { useApiPost } from './app/lib/api/requests/ssr/useApiPost';
-import { ApiUser } from './app/lib/api/types/types';
+import { ApiUser } from './app/lib/api/types/entities';
+import {destroyCookie } from 'nookies';
 
 export async function middleware(request: NextRequest) {
-
-    console.log("*** Call Middleware *** ");
 
     const { pathname } = request.nextUrl
     const token = request.cookies.get('shop.token');
@@ -54,7 +53,10 @@ export const config = {
 }
 
 async function authenticatedUser(token: string) {
-    const { data: user } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
+    const { data: user, error } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
+    if (error) {
+        destroyCookie(undefined, 'shop.token');
+    }
     return user;
 }
 

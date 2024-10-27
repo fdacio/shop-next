@@ -1,4 +1,4 @@
-// However, these types are generated automatically if you're using an ORM such as Prisma.
+
 export type ApiUser = {
     id: string;
     nome: string;
@@ -6,7 +6,6 @@ export type ApiUser = {
     email: string;
     password: string;
     rules: Rule[];
-    emailVerified: Date
   };
   
   export type Rule = {
@@ -34,17 +33,20 @@ export type ApiUser = {
     email: string;
   };
   
-  export type Orders = {
+  export type Order = {
     id: string;
-    customer_id: string;
-    amount: number;
-    date: string;
-    // In TypeScript, this is called a string union type.
-    // It means that the "status" property can only be one of the two strings: 'pending' or 'paid'.
-    status: 'pending' | 'paid';
+    customer: Customer;
+    data: string;
+    //status: 'pending' | 'paid';
   };
 
   export type ApiErrorType = {
     status : Number,
     message : string
+  }
+
+  export type Config = {
+    id: string,
+    chave: string,
+    valor: string
   }
