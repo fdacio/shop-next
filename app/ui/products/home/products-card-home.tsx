@@ -1,5 +1,5 @@
 import { Product } from "@/app/lib/api/types/entities";
-import styles from "@/app/ui/products/products.module.css";
+import styles from "@/app/ui/products/home/products.module.css";
 import Image from "next/image";
 
 export default function ProductsCardHome({ product }: { product: Product }) {

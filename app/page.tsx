@@ -1,5 +1,5 @@
 'use client'
-import ProductsHome from '@/app/ui/products/products-home';
+import ProductsHome from '@/app/ui/products/home/products-home';
 import ShopLogo from '@/app/ui/shop-logo';
 import ShopLogoBlack from '@/app/ui/shop-logo-black';
 import ApiMessageErro from './ui/api-messge-error';

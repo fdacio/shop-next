@@ -3,6 +3,7 @@ import { useApiGet } from "@/app/lib/api/requests/csr/useApiGet";
 import { Product } from "@/app/lib/api/types/entities";
 import ApiMessageResponse from "@/app/ui/api-message-response";
 import Loading from "@/app/ui/loading";
+import ListProducts from "@/app/ui/products/list";
 
 export default function Page() {
 
@@ -10,17 +11,10 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Products</h1>
-            <ul>
+            <h1 className="text-bold">Products</h1>
             <Loading isLoading={loading} />
             <ApiMessageResponse status={error?.status} message={error?.message} />
-                {products?.map((product: Product) => {
-                    return (
-                        <li key={product.id}>{product.nome}</li>
-                    )
-                }
-                )}
-            </ul>
+            <ListProducts data={products} />
         </div>
     )
 }

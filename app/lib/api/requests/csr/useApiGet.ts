@@ -27,8 +27,6 @@ export const useApiGet = <T = unknown>(url: string, options = {}) : ApiResponseT
                     setData(response.data.content);
                 }
                 else {
-                    console.log("Response useApiGet");
-                    console.log(response.data);
                     setData(response.data);
                 }
             }
