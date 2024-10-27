@@ -3,6 +3,7 @@ import { useApiGet } from "@/app/lib/api/requests/csr/useApiGet";
 import { Customer } from "@/app/lib/api/types/entities";
 import ApiMessageResponse from "@/app/ui/api-message-response";
 import Loading from "@/app/ui/loading";
+import ListCutomers from "@/app/ui/customers/list"
 
 export default function Page() {
 
@@ -11,16 +12,9 @@ export default function Page() {
     return (
         <div>
             <h1>Customers</h1>
-            <ul>
-                <Loading isLoading={loading} />
-                <ApiMessageResponse status={error?.status} message={error?.message} />
-                {customers?.map((customer: Customer) => {
-                    return (
-                        <li key={customer.id}>{customer.nome}</li>
-                    )
-                }
-                )}
-            </ul>
+            <Loading isLoading={loading} />
+            <ApiMessageResponse status={error?.status} message={error?.message} />
+            <ListCutomers data={customers} />
         </div>
     )
 }

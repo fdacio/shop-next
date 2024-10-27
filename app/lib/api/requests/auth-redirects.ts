@@ -1,6 +1,6 @@
 'use server'
 import { redirect, RedirectType } from 'next/navigation'
-import { ApiUser } from './lib/api/types/entities';
+import { ApiUser } from '../types/entities';
 
 export async function redirectSignIn(user : ApiUser) {
 

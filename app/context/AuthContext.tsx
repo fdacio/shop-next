@@ -1,7 +1,7 @@
 'use client'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { createContext } from "react";
-import { redirectSignIn, redirectSignOut } from '../auth-redirects';
+import { redirectSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
 import { useApiPost } from "../lib/api/requests/ssr/useApiPost";
 import { ApiUser, Token } from "../lib/api/types/entities";
 import { ApiError } from '../lib/api/exceptions/ApiError';
