@@ -1,10 +1,12 @@
-export default function ApiMessageResponse({ status, message } : { status : Number | undefined , message : string | undefined}) {
+import { ApiResponse } from "../lib/api/types/entities";
+
+export default function ApiMessageResponse({ response }: { response: ApiResponse | undefined }) {
 
 
     return (
         <>
             {
-                (message?.toString != null) && <div>{message}</div>
+                (response) && <div>{response.message}</div>
             }
         </>
     )

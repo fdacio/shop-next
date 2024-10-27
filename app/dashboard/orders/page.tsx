@@ -7,14 +7,13 @@ import ListOrders from "@/app/ui/orders/list"
 
 export default function Page() {
 
-    const { data: orders, loading, error } = useApiGet<Order[] | undefined>("/order");
+    const { data: orders, loading, success, error } = useApiGet<Order[] | undefined>("/order");
 
     return (
         <div>
-            <h1>Orders</h1>
-
+            <h1 className="mb-4 text-2xl">Orders</h1>
             <Loading isLoading={loading} />
-            <ApiMessageResponse status={error?.status} message={error?.message} />
+            <ApiMessageResponse response={(error) ?? error} />
             <ListOrders data={orders} />
 
         </div>

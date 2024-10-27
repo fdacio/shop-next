@@ -22,19 +22,20 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: any) {
 
-    async function signIn({ email, password }: SignInData) {
+    //Funcao do provider que faz o login
+    async function signIn({ email : username, password }: SignInData) {
 
         destroyCookie(undefined, 'shop.token');
 
-        let loginData = {
-            "username": email,
+        let data = {
+            "username": username,
             "password": password
         }
 
-        const { data: token, error : errorLogin } = await useApiPost<Token>("/auth/login", loginData);
+        const { data: token, error: errorLogin } = await useApiPost<Token>("/auth/login", data);
 
         if (errorLogin) {
-            throw new ApiError(errorLogin.status, errorLogin.message)
+            throw new ApiError(errorLogin.status, errorLogin.message);
         }
 
         if (token) {
@@ -42,10 +43,9 @@ export function AuthProvider({ children }: any) {
             setCookie(undefined, 'shop.token', token?.token, {
                 expires: token?.expired
             });
-            //axiosInstance.defaults.headers['Authorization'] = `Bearer ${token.token}`;
         }
 
-        const { data: user, error : errorGetUser } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
+        const { data: user, error: errorGetUser } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
 
 
         if (user) {
@@ -54,11 +54,13 @@ export function AuthProvider({ children }: any) {
 
     }
 
+    //Funcao do logout que faz o logout
     async function signOut() {
         destroyCookie(undefined, 'shop.token');
         await redirectSignOut();
     }
 
+    //Função que retorna os dados do usuário logado
     async function authenticatedUser() {
 
         const { 'shop.token': token } = parseCookies();

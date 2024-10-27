@@ -9,7 +9,7 @@ export default function List({ data : configs }: { data: Config[] | undefined })
         <ul>
             {configs?.map((config: Config) => {
                 return (
-                    <li key={config.id} onClick={() => setValue("valor", config.valor)}>{config.chave} | {config.valor} </li>
+                    <li className="cursor-pointer" key={config.id} onClick={() => setValue("valor", config.valor)}>{config.id} | {config.chave} | {config.valor} </li>
                 )
             }
             )}

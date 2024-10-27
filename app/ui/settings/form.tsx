@@ -4,68 +4,82 @@ import { Config } from "tailwindcss";
 import ApiMessageResponse from "../api-message-response";
 import { Button } from "../button";
 import { roboto } from "../fonts";
-import { ApiErrorType } from "@/app/lib/api/types/entities";
-import { useState } from "react";
+import { ApiResponse, ApiResponseError, ApiResponseSuccess } from "@/app/lib/api/types/entities";
+import { useEffect, useState } from "react";
 
-export default function Form() {
+export default function Form({ data : config }: { data: Config | undefined }) {
 
     const { register, handleSubmit, setValue } = useForm();
     const [isLoading, setIsLoading] = useState(false);
-    const [errorApi, setErrorApi] = useState<ApiErrorType | undefined>();
+    const [responseApi, setResponseApi] = useState<ApiResponse | undefined>(undefined);
+    const [responseApiError, setResponseApiError] = useState<ApiResponseError | undefined>(undefined);
+    const [responseApiSuccess, setResponseApiSuccess] = useState<ApiResponseSuccess | undefined>(undefined);
+    
+
+    useEffect(() => {
+        setValue("valor", config?.valor)
+    })
 
     const handleUpdateSetting = async (data: any) => {
         setIsLoading(true);
-        useApiPatch<Config>("/auth/config/update-expire-token-", data)
-            .then((response) => { })
-            .catch(err => { setErrorApi(err) })
+        setResponseApi(undefined);
+        useApiPatch<Config>("/auth/config/expire-token", data)
+            .then((response) => { 
+                console.log(response)
+                if(response.data) {
+                    setResponseApi({status: 200, message: "Atualização realizada com success"})
+                    
+                }
+            })
+            .catch(err => { setResponseApi(err) })
             .finally(() => setIsLoading(false));
     }
     return (
         <form onSubmit={handleSubmit(handleUpdateSetting)} className="space-y-3">
-        <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-            <h1 className={`${roboto.className} mb-3 text-2xl`}>
-                Expire Token Update
-            </h1>
-            <ApiMessageResponse status={errorApi?.status} message={errorApi?.message} />
-            <div className="w-full">
-                <div>
-                    <label
-                        className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-                        htmlFor="valor"
-                    >
-                        Expire Token
-                    </label>
-                    <div className="relative">
-                        <input
-                            {...register('valor')}
-                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                            id="valor"
-                            type="number"
-                            name="valor"
-                            placeholder="Informe o tempo em segundos"
-                            required
-                        />
+            <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
+                <h1 className={`${roboto.className} mb-3 text-1xl`}>
+                    Expire Token Update
+                </h1>
+                <ApiMessageResponse response={responseApi} />
+                <div className="itens-center">
+                    <div>
+                        <label
+                            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                            htmlFor="valor"
+                        >
+                            Expire Token in seconds
+                        </label>
+                        <div className="flex gap-2">
+                            <input
+                                {...register('valor')}
+                                className="peer block w-80 rounded-md border border-gray-200 py-[9px] text-sm outline-2 placeholder:text-gray-500"
+                                id="valor"
+                                type="number"
+                                name="valor"
+                                placeholder="Informe o tempo em segundos"
+                                required
+                            />
+                            <Button className="bg-color-shop text-color-shop w-18" disabled={isLoading}>
+                                {
+                                    (!isLoading)
+                                        ?
+                                        <>
+                                            Save
+                                        </>
+                                        :
+                                        <>
+                                            Aguarde ...
+                                        </>
+                                }
+                            </Button>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <Button className="mt-4 w-full bg-color-shop text-color-shop" disabled={isLoading}>
-            {
-                (!isLoading)
-                    ?
-                    <>
-                        Save
-                    </>
-                    :
-                    <>
-                        Aguarde ...
-                    </>
-            }
-        </Button>
 
 
-    </form>
+        </form>
 
     )
 }

@@ -1,36 +1,35 @@
 'use client'
 import axiosInstance from "../axiosInstance";
-import { ApiErrorType } from "../../types/entities";
+import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 
-export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) => {
+export const useApiPost = <T = unknown>(url: string, dataRequest: any, options = {}) : ApiResponseType => {
 
     let data: T | undefined;
     let loading: boolean = false;
-    let error: ApiErrorType | any;
+    let error: ApiResponseError | undefined;
+    let success: ApiResponseSuccess | undefined;
 
-    const handlerPost = async (requestData: any) => {
+    const handlerPatch = async (requestData: any) => {
 
         loading = true;
 
         try {
             const response = await axiosInstance.post(url, requestData, options);
-            data = (response.data);
+            data = response.data;
+            success = {status : response.status, message : "Dado criado com sucesso" }
 
         } catch (err: any) {
-            let e = {
-                status: err.response?.status,
-                message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
-            }
             error = {
-                status : e.status,
-                message : e.message
+                status : err.response?.status,
+                message :  (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
+                fields : [],
             }
         } finally {
             loading = (false);
         }
     }
 
-    await handlerPost(dataRequest);
+    handlerPatch(dataRequest);
 
-    return { data, loading, error };
+    return { data, loading, success, error };
 }

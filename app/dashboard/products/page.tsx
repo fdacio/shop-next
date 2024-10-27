@@ -7,13 +7,14 @@ import ListProducts from "@/app/ui/products/list";
 
 export default function Page() {
 
-    const { data: products, loading, error } = useApiGet<Product[] | undefined>("/product");
-
+    const { data: products, loading, success, error } = useApiGet<Product[] | undefined>("/product");
+    console.log("Produtos");
+    console.log(products);
     return (
         <div>
-            <h1 className="text-bold">Products</h1>
+            <h1 className="mb-4 text-2xl">Products</h1>
             <Loading isLoading={loading} />
-            <ApiMessageResponse status={error?.status} message={error?.message} />
+            <ApiMessageResponse response={(error) ?? error} />
             <ListProducts data={products} />
         </div>
     )

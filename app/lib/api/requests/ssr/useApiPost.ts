@@ -1,12 +1,13 @@
+'use server'
 import axiosInstance from "../axiosInstance";
-import { ApiErrorType } from "../../types/entities";
-import { ApiAuthError } from "../../exceptions/ApiAuthError";
+import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 
-export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) => {
+export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) : Promise<ApiResponseType> => {
 
     let data: T | undefined;
     let loading: boolean = false;
-    let error: ApiErrorType | any;
+    let success: ApiResponseSuccess | undefined;
+    let error: ApiResponseError | undefined;
 
     const handlerPost = async (requestData: any) => {
 
@@ -14,23 +15,15 @@ export const useApiPost = async <T = unknown>(url: string, dataRequest: any, opt
 
         try {
             const response = await axiosInstance.post(url, requestData, options);
-            data = (response.data);
+            data = response.data;
+            success = {status : response.status, message : "Requisição realizada com sucesso" }
 
         } catch (err: any) {
-            
-            if (err.name === 'AxiosError') {
-                 error = {
-                    status : err.response?.status,
-                    message : err.message
-                }
-            } else {
-                error = {
-                    status :  err.response?.status,
-                    message : (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
-                }
-
+            error = {
+                status : err.response?.status,
+                message :  (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
+                fields : [],
             }
-
         } finally {
             loading = (false);
         }
@@ -38,5 +31,5 @@ export const useApiPost = async <T = unknown>(url: string, dataRequest: any, opt
 
     await handlerPost(dataRequest);
 
-    return { data, loading, error };
+    return { data, loading, success, error };
 }

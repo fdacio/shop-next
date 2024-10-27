@@ -7,13 +7,13 @@ import ListUsers from "@/app/ui/users/list";
 
 export default function Page() {
 
-    const { data: users, loading, error } = useApiGet<ApiUser[] | undefined>("/auth/user");
+    const { data: users, loading, success, error } = useApiGet<ApiUser[] | undefined>("/auth/user");
 
     return (
         <div>
-            <h1>Users</h1>
+            <h1 className="mb-4 text-2xl">Users</h1>
             <Loading isLoading={loading} />
-            <ApiMessageResponse status={error?.status} message={error?.message} />
+            <ApiMessageResponse response={(success) ? success : error} />
             <ListUsers data={users} />
         </div>
     )

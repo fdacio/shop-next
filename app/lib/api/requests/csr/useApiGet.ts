@@ -1,24 +1,20 @@
 'use client';
 import axiosInstance from "../axiosInstance";
-import { ApiErrorType } from "../../types/entities";
+import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 import { useEffect, useState } from "react";
 
-export type ApiResponseType = {
-    data: any,
-    loading: boolean,
-    error: ApiErrorType | undefined,
-}
 
-export const useApiGet = <T = unknown>(url: string, options = {}) : ApiResponseType => {
+export const useApiGet = <T = unknown>(url: string, options = {}): ApiResponseType => {
 
-
-    const [data, setData] = useState<T[] | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<ApiErrorType | undefined>(undefined);
+    const[data, setData] = useState<T[] | undefined>(undefined);
+    const[loading, setLoading] = useState(true);
+    const[error, setError] = useState<ApiResponseError | undefined>(undefined);
+    const[success, setSuccess] = useState<ApiResponseSuccess | undefined>(undefined);
 
     useEffect(() => {
 
         const handlerGet = async () => {
+
 
             try {
 
@@ -29,16 +25,17 @@ export const useApiGet = <T = unknown>(url: string, options = {}) : ApiResponseT
                 else {
                     setData(response.data);
                 }
+                setSuccess({ status: response.status, message: "Dados carreados com sucesso" });
             }
             catch (err: any) {
-                let e: ApiErrorType = {
+                setError({
                     status: err.response?.status,
-                    message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error
-                }
-                setError(e);
+                    message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
+                    fields: []
+                });
 
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
 
         }
@@ -47,6 +44,6 @@ export const useApiGet = <T = unknown>(url: string, options = {}) : ApiResponseT
 
     }, [url])
 
-    return { data, loading, error }
+    return { data, loading, success, error }
 
 }
