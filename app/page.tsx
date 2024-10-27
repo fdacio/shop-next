@@ -42,7 +42,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col p-6">
       {/* <div className={styles.shape} /> */}
       <div className="flex h-20 shrink-0 items-center justify-between rounded-md bg-color-shop p-4 md:h-40 ">
-        <ShopLogo />
+        <ShopLogo /> <p className='text-color-shop'>*******</p>
 
         {
           (authUser) ?

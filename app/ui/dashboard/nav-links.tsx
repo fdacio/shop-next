@@ -8,6 +8,7 @@ import {
   DocumentDuplicateIcon,
   TagIcon,
   UsersIcon,
+  Cog6ToothIcon
 } from '@heroicons/react/24/outline';
 
 // Map of links to display in the side navigation.
@@ -33,6 +34,11 @@ const links = [
     name: 'Users', 
     href: '/dashboard/users', 
     icon: UsersIcon 
+  },
+  { 
+    name: 'Settings', 
+    href: '/dashboard/settings', 
+    icon: Cog6ToothIcon 
   },
 ];
 

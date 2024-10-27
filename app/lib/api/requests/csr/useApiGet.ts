@@ -23,12 +23,12 @@ export const useApiGet = <T = unknown>(url: string, options = {}) : ApiResponseT
             try {
 
                 const response = await axiosInstance.get(url, options);
-                console.log("response");
-                console.log(response);
                 if (response.data.hasOwnProperty('content')) {
                     setData(response.data.content);
                 }
                 else {
+                    console.log("Response useApiGet");
+                    console.log(response.data);
                     setData(response.data);
                 }
             }
@@ -47,7 +47,7 @@ export const useApiGet = <T = unknown>(url: string, options = {}) : ApiResponseT
 
         handlerGet();
 
-    }, [])
+    }, [url])
 
     return { data, loading, error }
 

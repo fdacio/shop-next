@@ -38,6 +38,7 @@ export function AuthProvider({ children }: any) {
         }
 
         if (token) {
+            destroyCookie(undefined, 'shop.token');
             setCookie(undefined, 'shop.token', token?.token, {
                 expires: token?.expired
             });

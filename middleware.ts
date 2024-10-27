@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
 
         if (isRouterLogin && (isCustomer)) return NextResponse.redirect(new URL('/', request.url));
 
-        if (isRouterResourceUsers && !isAdmin) return NextResponse.redirect(new URL('/dashboard', request.url));
+        //if (isRouterResourceUsers && !isAdmin) return NextResponse.redirect(new URL('/dashboard', request.url));
 
         //if (isAdmin || isOperator) return NextResponse.redirect(new URL('/dashboard', request.url));
 
