@@ -2,14 +2,14 @@
 import axiosInstance from "../axiosInstance";
 import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 
-export const useApiPut = <T = unknown>(url: string, dataRequest: any, options = {}) : ApiResponseType => {
+export const useApiPut = async <T = unknown>(url: string, dataRequest: any, options = {}) : Promise<ApiResponseType> => {
 
     let data: T | undefined;
     let loading: boolean = false;
     let error: ApiResponseError | undefined;
     let success: ApiResponseSuccess | undefined;
 
-    const handlerPatch = async (requestData: any) => {
+    const handlerPut = async (requestData: any) => {
 
         loading = true;
 
@@ -29,7 +29,7 @@ export const useApiPut = <T = unknown>(url: string, dataRequest: any, options = 
         }
     }
 
-    handlerPatch(dataRequest);
+    await handlerPut(dataRequest);
 
     return { data, loading, success, error };
 }

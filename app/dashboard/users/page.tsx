@@ -13,7 +13,7 @@ export default function Page() {
         <div>
             <h1 className="mb-4 text-2xl">Users</h1>
             <Loading isLoading={loading} />
-            <ApiMessageResponse response={(success) ? success : error} />
+            <ApiMessageResponse response={(error) ?? error} />
             <ListUsers data={users} />
         </div>
     )

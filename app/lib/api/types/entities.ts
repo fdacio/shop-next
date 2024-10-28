@@ -54,8 +54,8 @@ export type ApiResponseType = {
 }
 
 export type ApiResponse = {
-  status: Number,
-  message: string,
+  status: Number | undefined,
+  message: string | undefined,
 }
 
 export interface ApiResponseError extends ApiResponse {

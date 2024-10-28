@@ -56,6 +56,7 @@ export function AuthProvider({ children }: any) {
 
     //Funcao do logout que faz o logout
     async function signOut() {
+        console.log("Logout");
         destroyCookie(undefined, 'shop.token');
         await redirectSignOut();
     }

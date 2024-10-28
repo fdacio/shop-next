@@ -1,3 +1,4 @@
+/** Esse hook é utilizada para realizar o login do lado servidor Node.js */
 'use server'
 import axiosInstance from "../axiosInstance";
 import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";

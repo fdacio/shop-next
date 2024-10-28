@@ -7,32 +7,29 @@ import { roboto } from "../fonts";
 import { ApiResponse, ApiResponseError, ApiResponseSuccess } from "@/app/lib/api/types/entities";
 import { useEffect, useState } from "react";
 
-export default function Form({ data : config }: { data: Config | undefined }) {
+export default function Form({ data: config }: { data: Config | undefined }) {
 
     const { register, handleSubmit, setValue } = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [responseApi, setResponseApi] = useState<ApiResponse | undefined>(undefined);
-    const [responseApiError, setResponseApiError] = useState<ApiResponseError | undefined>(undefined);
-    const [responseApiSuccess, setResponseApiSuccess] = useState<ApiResponseSuccess | undefined>(undefined);
-    
 
     useEffect(() => {
-        setValue("valor", config?.valor)
-    })
+        setValue("valor", config?.valor);
+    }, [config]);
 
     const handleUpdateSetting = async (data: any) => {
         setIsLoading(true);
         setResponseApi(undefined);
-        useApiPatch<Config>("/auth/config/expire-token", data)
-            .then((response) => { 
-                console.log(response)
-                if(response.data) {
-                    setResponseApi({status: 200, message: "Atualização realizada com success"})
-                    
-                }
-            })
-            .catch(err => { setResponseApi(err) })
-            .finally(() => setIsLoading(false));
+        await useApiPatch<Config>("/auth/config/expire-token", data)
+            .then(response => {
+                setResponseApi({ status: response.success?.status, message: response.success?.message });
+                setValue("valor", response.data.valor);
+            }).catch(err => {
+                setResponseApi({ status: err.error?.status, message: err.error?.message });
+            }).finally(() => {
+                setIsLoading(false)
+            });
+
     }
     return (
         <form onSubmit={handleSubmit(handleUpdateSetting)} className="space-y-3">

@@ -2,34 +2,49 @@
 import axiosInstance from "../axiosInstance";
 import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 
-export const useApiPatch = <T = unknown>(url: string, dataRequest: any, options = {}) : ApiResponseType => {
+export const useApiPatch = async <T = unknown>(url: string, dataRequest: any, options = {}): Promise<ApiResponseType> => {
 
     let data: T | undefined;
     let loading: boolean = false;
     let error: ApiResponseError | undefined;
     let success: ApiResponseSuccess | undefined;
 
+    function setData(_data: any) {
+        data = _data;
+    }
+    function setLoading(_loading: any) {
+        loading = _loading;
+    }
+
+    function setError(_error: any) {
+        error = _error;
+    }
+
+    function setSuccess(_success: any) {
+        success = _success;
+    }
+
     const handlerPatch = async (requestData: any) => {
 
-        loading = true;
+        setLoading(true);
 
         try {
             const response = await axiosInstance.patch(url, requestData, options);
-            data = response.data;
-            success = {status : response.status, message : "Dado atualizado com sucesso" }
+            setData(response.data);
+            setSuccess({ status: response.status, message: "Dado atualizado com sucesso" });
 
         } catch (err: any) {
-            error = {
-                status : err.response?.status,
-                message :  (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
-                fields : [],
-            }
+            setError({
+                status: err.response?.status,
+                message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
+                fields: [],
+            });
         } finally {
-            loading = (false);
+            setLoading(false);
         }
     }
 
-    handlerPatch(dataRequest);
+    await handlerPatch(dataRequest);
 
     return { data, loading, success, error };
 }
