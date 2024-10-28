@@ -8,10 +8,10 @@ export default function ProductsCardHome({ product }: { product: Product }) {
         <div className={styles.productsCard}>
             <div className={styles.containerPhoto}>
                 {product.foto &&
-                    <Image src={product.foto} width="100" height="150" overrideSrc="/override.jpg" alt="Imagem do produto" ></Image>
+                    <Image src={product.foto}  width="100" height="150" overrideSrc="/override.jpg" alt="Imagem do produto" ></Image>
                 }
             </div>
-            <div className="w-80">
+            <div className={styles.containerName}>
                 <p className={styles.textName}>{product.nome}</p>
                 <p>{product.descricao}</p>
             </div>

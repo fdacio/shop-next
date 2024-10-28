@@ -17,12 +17,23 @@
     border-radius: 4px;
 }
 
+
+.containerName {
+    width: auto;
+    margin: 8px;
+}
+
 .textName {
     font-size: 1.2rem;
     font-weight: bold;
 }
 
 .containerPhoto {
+    width: fit-content;
+    min-width: 200px;
+    padding: 2px;
+    height: auto;
+    margin: 8px;
     border: 1px solid #ccc;
     border-radius: 2px;
 }
