@@ -7,9 +7,8 @@ import ListProducts from "@/app/ui/products/list";
 
 export default function Page() {
 
-    const { data: products, loading, success, error } = useApiGet<Product[] | undefined>("/product");
-    console.log("Produtos");
-    console.log(products);
+    const { data: products, loading, error } = useApiGet<Product[] | undefined>("/product");
+
     return (
         <div>
             <h1 className="mb-4 text-2xl">Products</h1>

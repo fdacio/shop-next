@@ -18,7 +18,7 @@ export default function Home() {
   const [authUser, setAuthUser] = useState<ApiUser | undefined>(undefined);
   const [apiError, setApiError] = useState<ApiError | undefined>(undefined);
 
-  const handleSignOut = async () => {
+  const handlerSignOut = async () => {
     await signOut();
   }
 
@@ -42,13 +42,13 @@ export default function Home() {
     <main className="flex min-h-screen flex-col p-6">
       {/* <div className={styles.shape} /> */}
       <div className="flex h-20 shrink-0 items-center justify-between rounded-md bg-color-shop p-4 md:h-40 ">
-        <ShopLogo /> <p className='text-color-shop'>*******</p>
+        <ShopLogo /> <p className='text-color-shop'>Bem Vindo ao Shop</p>
 
         {
           (authUser) ?
             <div className="flex items-center gap-5 md:self-end">
               <span className='text-color-shop'>{authUser?.nome}</span>
-              <form onSubmit={handleSubmit(handleSignOut)}>
+              <form onSubmit={handleSubmit(handlerSignOut)}>
                 <button className='p-2 m-1 rounded-md bg-color-shop text-color-shop '>Sair</button>
               </form>
             </div>

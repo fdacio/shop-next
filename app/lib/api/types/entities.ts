@@ -14,8 +14,8 @@ export type Rule = {
 }
 
 export type Token = {
-  token: string;
-  expired: Date
+  token: string | undefined;
+  expired: number | undefined 
 }
 
 export type Product = {
@@ -54,8 +54,8 @@ export type ApiResponseType = {
 }
 
 export type ApiResponse = {
-  status: Number | undefined,
-  message: string | undefined,
+  status: Number,
+  message: string,
 }
 
 export interface ApiResponseError extends ApiResponse {

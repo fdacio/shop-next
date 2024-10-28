@@ -4,7 +4,7 @@ import { createContext } from "react";
 import { redirectSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
 import { useApiPost } from "../lib/api/requests/ssr/useApiPost";
 import { ApiUser, Token } from "../lib/api/types/entities";
-import { ApiError } from '../lib/api/exceptions/ApiError';
+import { ApiAuthError } from '../lib/api/exceptions/ApiAuthError';
 
 
 type AuthContextType = {
@@ -35,11 +35,10 @@ export function AuthProvider({ children }: any) {
         const { data: token, error: errorLogin } = await useApiPost<Token>("/auth/login", data);
 
         if (errorLogin) {
-            throw new ApiError(errorLogin.status, errorLogin.message);
+            throw new ApiAuthError(errorLogin.status, errorLogin.message);
         }
 
         if (token) {
-            destroyCookie(undefined, 'shop.token');
             setCookie(undefined, 'shop.token', token?.token, {
                 expires: token?.expired
             });
@@ -56,7 +55,6 @@ export function AuthProvider({ children }: any) {
 
     //Funcao do logout que faz o logout
     async function signOut() {
-        console.log("Logout");
         destroyCookie(undefined, 'shop.token');
         await redirectSignOut();
     }
@@ -71,8 +69,7 @@ export function AuthProvider({ children }: any) {
         const { data: user, error } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
 
         if (error) {
-            destroyCookie(undefined, 'shop.token');
-            throw new ApiError(error.status, error.message)
+            throw new ApiAuthError(error?.status, error?.message)
         }
 
         return user

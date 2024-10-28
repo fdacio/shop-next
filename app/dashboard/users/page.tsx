@@ -7,7 +7,7 @@ import ListUsers from "@/app/ui/users/list";
 
 export default function Page() {
 
-    const { data: users, loading, success, error } = useApiGet<ApiUser[] | undefined>("/auth/user");
+    const { data: users, loading, error } = useApiGet<ApiUser[] | undefined>("/auth/user");
 
     return (
         <div>

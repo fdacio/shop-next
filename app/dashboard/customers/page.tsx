@@ -7,7 +7,7 @@ import ListCutomers from "@/app/ui/customers/list"
 
 export default function Page() {
 
-    const { data: customers, loading, success, error } = useApiGet<Customer[] | undefined>("/customer");
+    const { data: customers, loading, error } = useApiGet<Customer[] | undefined>("/customer");
 
     return (
         <div>

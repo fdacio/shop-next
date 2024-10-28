@@ -7,7 +7,7 @@ import ListOrders from "@/app/ui/orders/list"
 
 export default function Page() {
 
-    const { data: orders, loading, success, error } = useApiGet<Order[] | undefined>("/order");
+    const { data: orders, loading, error } = useApiGet<Order[] | undefined>("/order");
 
     return (
         <div>

@@ -14,7 +14,7 @@ export default function SideNav() {
   const { handleSubmit } = useForm();
   const [authUser, setAuthUser] = useState<ApiUser | undefined>(undefined);
 
-  const handleSignOut = async () => {
+  const handlerSignOut = async () => {
     await signOut();
   }
 
@@ -51,10 +51,7 @@ export default function SideNav() {
               <p>{authUser?.username}</p>
             </div>}
         </div>
-        <form onSubmit={handleSubmit(handleSignOut)}
-          action={async () => {
-            await signOut();
-          }}>
+        <form onSubmit={handleSubmit(handlerSignOut)}>
           <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
             <PowerIcon className="w-6" />
             <div className="hidden md:block">Sign Out</div>
