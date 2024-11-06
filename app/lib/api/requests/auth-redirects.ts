@@ -20,10 +20,12 @@ export async function redirectAfterSignIn(user : ApiUser) {
 
 export async function redirectSignOut() {
     redirect("/", RedirectType.push);
+    //NextResponse.redirect(new URL('/'));
 }
 
 export async function redirectRoot() {
     redirect("/", RedirectType.push);
+    //return NextResponse.redirect(new URL('/'));
 }
 
 export async function redirectLogin() {

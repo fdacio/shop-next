@@ -50,8 +50,6 @@ export default function MenuUser({ user }: { user: ApiUser }) {
 
     const handlerSignOut = async () => {
         await signOut();
-        await redirectRoot();
-        //setAuthUser(undefined);
     }
 
 
