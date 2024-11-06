@@ -48,6 +48,16 @@ export default function Home() {
           (authUser) ?
             <div className="flex items-center gap-5 md:self-end">
               <span className='text-color-shop'>{authUser?.nome}</span>
+              {authUser?.rules.map(r => {
+                 return r.nome.includes("Admin") ?? 
+                 <Link
+                 href="/dashboard"
+                 className="flex items-center gap-5 md:self-end bg-color-shop text-sm font-medium text-color-shop transition-colors text-center md:text-base"
+               >
+                 <span>Dashboard</span> <ArrowRightIcon className="w-5 md:w-6 text-color" />
+               </Link >
+              })
+            } 
               <form onSubmit={handleSubmit(handlerSignOut)}>
                 <button className='p-2 m-1 rounded-md bg-color-shop text-color-shop '>Sair</button>
               </form>

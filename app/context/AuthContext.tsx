@@ -1,6 +1,5 @@
 'use client'
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
-import { createCookie, clearCookie } from '@/app/lib/cookies';
+import { createCookie, clearCookie, getCookie } from '@/app/lib/cookies';
 import { createContext } from "react";
 import { redirectAfterSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
 import { useApiPostSSR } from "../lib/api/requests/ssr/useApiPost";
@@ -27,7 +26,8 @@ export function AuthProvider({ children }: any) {
     //Funcao do provider que faz o login
     async function signIn({ email : username, password }: SignInData) {
 
-        destroyCookie(undefined, 'shop.token');
+        //destroyCookie(undefined, 'shop.token');
+        await clearCookie("shop.token");
 
         let data = {
             "username": username,
@@ -37,13 +37,14 @@ export function AuthProvider({ children }: any) {
         const { data: token, error: errorLogin } = await useApiPostSSR<Token>("/auth/login", data, {withCredentials: false});
 
         if (errorLogin) {
-            throw new ApiAuthError(errorLogin.status, errorLogin.message);
+                throw new ApiAuthError(errorLogin.status, (errorLogin.message ? errorLogin.message : ""));
         }
 
         if (token) {
-            setCookie(undefined, 'shop.token', token?.token, {
-                expires: token?.expired
-            });
+            await createCookie('shop.token', token?.token);
+            // setCookie(undefined, 'shop.token', token?.token, {
+            //     expires: token?.expired
+            // });
         }
 
         const { data: user, error: errorGetUser } = await useApiPostSSR<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
@@ -58,21 +59,23 @@ export function AuthProvider({ children }: any) {
     //Funcao do logout que faz o logout
     async function signOut() {
         //destroyCookie(undefined, 'shop.token');
-        clearCookie("shop.token");
-        await redirectSignOut();
+        await clearCookie("shop.token");
+        redirectSignOut();
     }
 
     //Função que retorna os dados do usuário logado
     async function authenticatedUser() {
 
-        const { 'shop.token': token } = parseCookies();
+        //const { 'shop.token': token } = parseCookies();
+        const cookieToken = await getCookie('shop.token');
+        const token = cookieToken?.value;
 
         if (!token) return;
 
         const { data: user, error } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
 
         if (error) {
-            throw new ApiAuthError(error.status, error.message)
+            throw new ApiAuthError(error.status, error.message ? error.message : "")
         }
 
         return user
