@@ -1,11 +1,11 @@
 import { useApiPatch } from "@/app/lib/api/requests/csr/useApiPatch";
 import { useForm } from "react-hook-form";
 import { Config } from "tailwindcss";
-import ApiMessageResponse from "../api-message-response";
 import { Button } from "../button";
 import { roboto } from "../fonts";
-import { ApiResponse, ApiResponseError, ApiResponseSuccess } from "@/app/lib/api/types/entities";
+import { ApiResponse } from "@/app/lib/api/types/entities";
 import { useEffect, useState } from "react";
+import ApiMessageResponse from "../api-message-response";
 
 export default function Form({ data: config }: { data: Config | undefined }) {
 
@@ -32,6 +32,7 @@ export default function Form({ data: config }: { data: Config | undefined }) {
 
     }
     return (
+
         <form onSubmit={handleSubmit(handleUpdateSetting)} className="space-y-3">
             <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
                 <h1 className={`${roboto.className} mb-3 text-1xl`}>
@@ -74,9 +75,8 @@ export default function Form({ data: config }: { data: Config | undefined }) {
                     </div>
                 </div>
             </div>
-
-
         </form>
 
     )
+
 }

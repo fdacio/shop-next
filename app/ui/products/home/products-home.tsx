@@ -1,7 +1,7 @@
 "use client"
 import { useApiGet } from '@/app/lib/api/requests/csr/useApiGet';
 import { Product } from "@/app/lib/api/types/entities";
-import styles from "@/app/ui/products/home/products.module.css";
+import styles from "@/app/ui/products/home/Products.module.css";
 import ProductsCardHome from "./products-card-home";
 export default function ProductsHome() {
 

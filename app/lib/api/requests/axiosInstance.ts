@@ -1,21 +1,10 @@
 import axios, { AxiosError } from 'axios';
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
-import { useApiPostSSR } from "./ssr/useApiPost";
 import { Token } from '../types/entities';
-import { ApiAuthError } from '../exceptions/ApiAuthError';
-import { ApiError } from '../exceptions/ApiError';
-import { createCookie, clearCookie, getCookie } from '@/app/lib/cookies';
-import { useApiPost } from './csr/useApiPost';
-import { redirectLogin, redirectSignOut } from './auth-redirects';
+import { redirectSignOut } from './auth-redirects';
+import { useApiPostSSR } from './ssr/useApiPost';
+import { parseCookies, destroyCookie, setCookie } from 'nookies';
 
 let isRefreshToken = false;
-
-let failedRequestQueue: {
-	// Se a requisição der sucesso, chama o onSuccess
-	onSuccess: (token: string) => void;
-	// Se a requisição der erro, chama o onFailure
-	onFailure: (err: AxiosError) => void;
-}[] = [];
 
 const axiosInstance = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -57,9 +46,9 @@ axiosInstance.interceptors.response.use((response) => {
 
 			originalRequest._retry = true;
 
-			let responseErrorMessage = JSON.stringify(error.response.data.message, null, '\t');
+			let responseErrorMessage = error.response.data.message;
 
-			let isRefreshToken = (responseErrorMessage != undefined) ? responseErrorMessage.includes('Token expirado') : false;
+			isRefreshToken = (responseErrorMessage != undefined) ? responseErrorMessage.includes('Token expirado') : false;
 
 			if (isRefreshToken) {
 
@@ -69,10 +58,11 @@ axiosInstance.interceptors.response.use((response) => {
 
 				try {
 
-					let cookieToken = await getCookie("shop.token");
+					//let cookieToken = await getCookie("shop.token");
+					const { 'shop.token': accessToken } = parseCookies(undefined);
 
 					const dataToken = {
-						token: cookieToken?.value,
+						token: accessToken,
 						expired: undefined
 					}
 
@@ -81,18 +71,16 @@ axiosInstance.interceptors.response.use((response) => {
 
 					let newToken = response.data.token;
 
-					
-					await clearCookie("shop.token");
-					await createCookie("shop.token", newToken);
-					
+					setCookie(undefined, "shop.token", newToken);
+
 					axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-					
+
 					console.log("Token renovado!!!");
 
 
 				} catch (refreshError) {
-					await clearCookie("shop.token");
-					redirectSignOut();
+					destroyCookie(undefined, "shop.token");
+					await redirectSignOut();
 					return Promise.reject(refreshError);
 				}
 
@@ -108,3 +96,4 @@ axiosInstance.interceptors.response.use((response) => {
 );
 
 export default axiosInstance;
+

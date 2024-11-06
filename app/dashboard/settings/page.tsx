@@ -15,7 +15,7 @@ export default function Page() {
             <Loading isLoading={loading} />
             <ApiMessageResponse response={(error) ?? error} />
             <div className="p-1"></div>
-            {(!error) &&
+            {(success?.status === 200) &&
             <FormConfig data={configExpireToken}/>
            }
         </div>

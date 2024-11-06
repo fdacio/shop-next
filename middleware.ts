@@ -14,12 +14,12 @@ export async function middleware(request: NextRequest) {
 
         if (user) {            
 
-            const isRouterResourceUsers = pathname.startsWith('/dashboard/users');
             const isRouterLogin = pathname.startsWith('/login');
             const isAdmin = userAdmin(user);
             const isOperator = userOperator(user);
             const isCustomer = userCustomer(user);
 
+            if (isCustomer) return NextResponse.redirect(new URL('/', request.url));
 
             if (isRouterLogin && (isAdmin || isOperator)) return NextResponse.redirect(new URL('/dashboard', request.url));
 
@@ -30,9 +30,14 @@ export async function middleware(request: NextRequest) {
             //if (isAdmin || isOperator) return NextResponse.redirect(new URL('/dashboard', request.url));
 
             // se o usuário logado custormer, redireciona para raiz do sistema (ponto de entrada do app)
-            if (isCustomer) return NextResponse.redirect(new URL('/', request.url));
+
+        } else {
+
+            return NextResponse.redirect(new URL('/login', request.url));
         }
+
     } else {
+        
         return NextResponse.redirect(new URL('/login', request.url));
     }
 }

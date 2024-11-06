@@ -21,6 +21,7 @@
 .containerName {
     width: auto;
     margin: 8px;
+    overflow-y: auto;
 }
 
 .textName {
@@ -33,6 +34,7 @@
     min-width: 200px;
     padding: 2px;
     height: auto;
+    contain: content;
     margin: 8px;
     border: 1px solid #ccc;
     border-radius: 2px;

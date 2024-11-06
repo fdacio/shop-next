@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import {
   UserGroupIcon,
   HomeIcon,
+  ChartBarSquareIcon,
   DocumentDuplicateIcon,
   TagIcon,
   UsersIcon,
@@ -14,7 +15,16 @@ import {
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Home', href: '/dashboard', icon: HomeIcon },
+  { 
+    name: 'Home', 
+    href: '/', 
+    icon: HomeIcon 
+  },
+  { 
+    name: 'Dashboard', 
+    href: '/dashboard', 
+    icon: ChartBarSquareIcon 
+  },
   {
     name: 'Products',
     href: '/dashboard/products',

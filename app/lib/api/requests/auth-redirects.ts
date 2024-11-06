@@ -19,11 +19,11 @@ export async function redirectAfterSignIn(user : ApiUser) {
 }
 
 export async function redirectSignOut() {
-    redirect("/logout");
+    redirect("/", RedirectType.push);
 }
 
 export async function redirectRoot() {
-    redirect("/");
+    redirect("/", RedirectType.push);
 }
 
 export async function redirectLogin() {

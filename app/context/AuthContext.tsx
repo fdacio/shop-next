@@ -6,6 +6,7 @@ import { useApiPostSSR } from "../lib/api/requests/ssr/useApiPost";
 import { useApiPost } from "../lib/api/requests/csr/useApiPost";
 import { ApiUser, Token } from "../lib/api/types/entities";
 import { ApiAuthError } from '../lib/api/exceptions/ApiAuthError';
+import { destroyCookie, setCookie } from 'nookies';
 
 
 type AuthContextType = {
@@ -23,31 +24,28 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: any) {
 
-    //Funcao do provider que faz o login
-    async function signIn({ email : username, password }: SignInData) {
+    async function signIn({ email: username, password }: SignInData) {
 
-        //destroyCookie(undefined, 'shop.token');
-        await clearCookie("shop.token");
+        destroyCookie(undefined, 'shop.token');
+        //await clearCookie("shop.token");
 
         let data = {
             "username": username,
             "password": password
         }
 
-        const { data: token, error: errorLogin } = await useApiPostSSR<Token>("/auth/login", data, {withCredentials: false});
+        const { data: dataToken, error: errorLogin } = await useApiPostSSR<Token>("/auth/login", data, { withCredentials: false });
 
         if (errorLogin) {
-                throw new ApiAuthError(errorLogin.status, (errorLogin.message ? errorLogin.message : ""));
+            throw new ApiAuthError(errorLogin.status, (errorLogin.message ? errorLogin.message : ""));
         }
 
-        if (token) {
-            await createCookie('shop.token', token?.token);
-            // setCookie(undefined, 'shop.token', token?.token, {
-            //     expires: token?.expired
-            // });
+        if (dataToken) {
+            setCookie(undefined, 'shop.token', dataToken.token);
+            //await createCookie('shop.token', token?.token);
         }
 
-        const { data: user, error: errorGetUser } = await useApiPostSSR<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
+        const { data: user, error: errorGetUser } = await useApiPostSSR<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + dataToken.token } });
 
 
         if (user) {
@@ -58,9 +56,9 @@ export function AuthProvider({ children }: any) {
 
     //Funcao do logout que faz o logout
     async function signOut() {
-        //destroyCookie(undefined, 'shop.token');
-        await clearCookie("shop.token");
-        redirectSignOut();
+        destroyCookie(undefined, 'shop.token');
+        //await clearCookie("shop.token");
+        await redirectSignOut();
     }
 
     //Função que retorna os dados do usuário logado
