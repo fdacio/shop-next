@@ -2,7 +2,7 @@
 import { redirect, RedirectType } from 'next/navigation'
 import { ApiUser } from '../types/entities';
 
-export async function redirectSignIn(user : ApiUser) {
+export async function redirectAfterSignIn(user : ApiUser) {
 
     user?.rules?.map((r: { nome: string; }) => {
 

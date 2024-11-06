@@ -1,9 +1,9 @@
-/** Esse hook é utilizada para realizar o login do lado servidor Node.js */
 'use server'
+/** Esse hook é utilizada para realizar o login do lado servidor Node.js */
 import axiosInstance from "../axiosInstance";
 import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 
-export const useApiPost = async <T = unknown>(url: string, dataRequest: any, options = {}) : Promise<ApiResponseType> => {
+export const useApiPostSSR = async <T = unknown>(url: string, dataRequest: any, options = {}) : Promise<ApiResponseType> => {
 
     let data: T | undefined;
     let loading: boolean = false;

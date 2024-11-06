@@ -5,7 +5,7 @@ import styles from "@/app/ui/products/home/products.module.css";
 import ProductsCardHome from "./products-card-home";
 export default function ProductsHome() {
 
-    const { data : products, loading } = useApiGet<Product[] | undefined>("/product/all/home");
+    const { data : products, loading } = useApiGet<Product[] | undefined>("/product/all/home", {withCredentials: false});
 
     return (
         <div className={styles.container}>

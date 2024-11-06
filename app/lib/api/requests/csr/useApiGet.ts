@@ -1,7 +1,9 @@
-'use client';
+'use client'
 import axiosInstance from "../axiosInstance";
 import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 import { useEffect, useState } from "react";
+import { ApiAuthError } from "../../exceptions/ApiAuthError";
+import { ApiError } from "../../exceptions/ApiError";
 
 
 export const useApiGet = <T = unknown>(url: string, options = {}): ApiResponseType => {
@@ -33,6 +35,7 @@ export const useApiGet = <T = unknown>(url: string, options = {}): ApiResponseTy
                     message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
                     fields: []
                 });
+                //throw new ApiError(err.response?.status, (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,);
 
             } finally {
                 setLoading(false);

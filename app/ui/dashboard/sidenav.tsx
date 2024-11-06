@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ApiUser } from '@/app/lib/api/types/entities';
 
+
 export default function SideNav() {
 
   const { signOut, authenticatedUser } = useContext(AuthContext);
@@ -21,10 +22,12 @@ export default function SideNav() {
   useEffect(() => {
 
     const handleAuthenticatedUser = async () => {
-
-      const user = await authenticatedUser();
-      if (user) setAuthUser(user);
-
+      try {
+        const user = await authenticatedUser();
+        if (user) setAuthUser(user);
+      } catch(error) {
+        setAuthUser(undefined);
+      }
     }
     handleAuthenticatedUser();
 

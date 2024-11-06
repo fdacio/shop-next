@@ -1,8 +1,10 @@
 'use client'
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { createCookie, clearCookie } from '@/app/lib/cookies';
 import { createContext } from "react";
-import { redirectSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
-import { useApiPost } from "../lib/api/requests/ssr/useApiPost";
+import { redirectAfterSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
+import { useApiPostSSR } from "../lib/api/requests/ssr/useApiPost";
+import { useApiPost } from "../lib/api/requests/csr/useApiPost";
 import { ApiUser, Token } from "../lib/api/types/entities";
 import { ApiAuthError } from '../lib/api/exceptions/ApiAuthError';
 
@@ -32,7 +34,7 @@ export function AuthProvider({ children }: any) {
             "password": password
         }
 
-        const { data: token, error: errorLogin } = await useApiPost<Token>("/auth/login", data);
+        const { data: token, error: errorLogin } = await useApiPostSSR<Token>("/auth/login", data, {withCredentials: false});
 
         if (errorLogin) {
             throw new ApiAuthError(errorLogin.status, errorLogin.message);
@@ -44,18 +46,19 @@ export function AuthProvider({ children }: any) {
             });
         }
 
-        const { data: user, error: errorGetUser } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
+        const { data: user, error: errorGetUser } = await useApiPostSSR<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token?.token } });
 
 
         if (user) {
-            await redirectSignIn(user);
+            await redirectAfterSignIn(user);
         }
 
     }
 
     //Funcao do logout que faz o logout
     async function signOut() {
-        destroyCookie(undefined, 'shop.token');
+        //destroyCookie(undefined, 'shop.token');
+        clearCookie("shop.token");
         await redirectSignOut();
     }
 
@@ -69,7 +72,7 @@ export function AuthProvider({ children }: any) {
         const { data: user, error } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
 
         if (error) {
-            throw new ApiAuthError(error?.status, error?.message)
+            throw new ApiAuthError(error.status, error.message)
         }
 
         return user

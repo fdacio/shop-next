@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { useApiPost } from './app/lib/api/requests/ssr/useApiPost';
+import { useApiPostSSR } from './app/lib/api/requests/ssr/useApiPost';
 import { ApiUser } from './app/lib/api/types/entities';
 
 export async function middleware(request: NextRequest) {
@@ -43,7 +43,7 @@ export const config = {
 }
 
 async function authenticatedUser(token: string) {
-    const { data: user } = await useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
+    const { data: user } = await useApiPostSSR<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + token } });
     return user;
 }
 
