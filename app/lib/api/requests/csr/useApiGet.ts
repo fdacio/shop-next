@@ -2,7 +2,7 @@
 import axiosInstance from "../axiosInstance";
 import { ApiResponseError, ApiResponseSuccess, ApiResponseType } from "../../types/entities";
 import { useEffect, useState } from "react";
-import { ApiAuthError } from "../../exceptions/ApiAuthError";
+import { AxiosError } from "axios";
 import { ApiError } from "../../exceptions/ApiError";
 
 
@@ -29,13 +29,15 @@ export const useApiGet = <T = unknown>(url: string, options = {}): ApiResponseTy
                 }
                 setSuccess({ status: response.status, message: "Dados carreados com sucesso" });
             }
-            catch (err: any) {
-                setError({
-                    status: err.response?.status,
-                    message: (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,
+            catch (err: AxiosError | any) {
+                let message = (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error; 
+                let status = err.response?.status; 
+                let error : ApiResponseError = {
+                    status: status,
+                    message: message,
                     fields: []
-                });
-                //throw new ApiError(err.response?.status, (err.response?.data?.message) ? err.response?.data?.message : err.response?.data?.error,);
+                }
+                setError(error);
 
             } finally {
                 setLoading(false);

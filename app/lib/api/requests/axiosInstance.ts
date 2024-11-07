@@ -3,6 +3,7 @@ import { Token } from '../types/entities';
 import { redirectSignOut } from './auth-redirects';
 import { useApiPostSSR } from './ssr/useApiPost';
 import { parseCookies, destroyCookie, setCookie } from 'nookies';
+import { getCookie, createCookie, clearCookie } from '../../cookies';
 
 let isRefreshToken = false;
 
@@ -12,10 +13,12 @@ const axiosInstance = axios.create({
 	withCredentials: true,
 })
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use(async (config) => {
 
 	if (config.withCredentials) {
-		const { 'shop.token': accessToken } = parseCookies(undefined);
+		//const { 'shop.token': accessToken } = parseCookies(undefined);
+		let cookieToken = await getCookie("shop.token");
+		let accessToken = cookieToken?.value;
 		if (accessToken) {
 			config.headers['Authorization'] = `Bearer ${accessToken}`;
 		}
@@ -43,6 +46,11 @@ axiosInstance.interceptors.response.use((response) => {
 		const originalRequest = error.config;
 
 		if (error.response?.status === 401 && !originalRequest._retry) {
+			
+			//const { 'shop.token': accessToken } = parseCookies(undefined);
+			let cookieToken = await getCookie("shop.token");
+			let invalidToken = cookieToken?.value;
+			await clearCookie("shop.token");
 
 			originalRequest._retry = true;
 
@@ -52,41 +60,40 @@ axiosInstance.interceptors.response.use((response) => {
 
 			if (isRefreshToken) {
 
-				isRefreshToken = false;
-
 				console.log("Token expirado");
 
 				try {
 
-					//let cookieToken = await getCookie("shop.token");
-					const { 'shop.token': accessToken } = parseCookies(undefined);
-
 					const dataToken = {
-						token: accessToken,
+						token: invalidToken,
 						expired: undefined
 					}
 
 					//Obtem o novo token - request side sever
 					const response = await useApiPostSSR<Token>('/auth/refresh-token', dataToken, { withCredentials: false });
-
+					
 					let newToken = response.data.token;
 
-					setCookie(undefined, "shop.token", newToken);
+					//setCookie(undefined, "shop.token", newToken);
+					await clearCookie("shop.token");
+					await createCookie("shop.token", newToken);
 
 					axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
 
 					console.log("Token renovado!!!");
 
+					return axiosInstance(originalRequest);
 
-				} catch (refreshError) {
-					destroyCookie(undefined, "shop.token");
-					await redirectSignOut();
+
+				} catch (refreshError: AxiosError | any) {
+					console.log(refreshError);
 					return Promise.reject(refreshError);
 				}
+ 
+			} 
 
-				return axiosInstance(originalRequest);
-
-			}
+			return axiosInstance(originalRequest);
+			
 
 		}
 

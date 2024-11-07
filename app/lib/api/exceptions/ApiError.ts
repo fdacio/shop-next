@@ -1,9 +1,10 @@
+import { AxiosError } from "axios";
 
-export class ApiError extends Error {
-    status: Number;
+export class ApiError extends AxiosError {
+    status: number | undefined;
     message: string ;
     constructor(
-        status: Number, message : string){
+        status: number | undefined, message : string ){
         super();
         this.status = status;
         this.message = message;

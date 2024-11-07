@@ -5,7 +5,7 @@ import { ApiUser } from './app/lib/api/types/entities';
 
 export async function middleware(request: NextRequest) {
 
-    const { pathname } = request.nextUrl
+    const { pathname } = request.nextUrl;
     const token = request.cookies.get('shop.token');
 
     if (token?.value) {
