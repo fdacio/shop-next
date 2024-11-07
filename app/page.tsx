@@ -17,6 +17,7 @@ export default function Home() {
   const { authenticatedUser } = useContext(AuthContext);
   const [authUser, setAuthUser] = useState<ApiUser | undefined>(undefined);
   const [apiError, setApiError] = useState<ApiError | undefined>(undefined);
+  const { signOut } = useContext(AuthContext);
 
   useEffect(() => {
 
@@ -31,6 +32,13 @@ export default function Home() {
     handleAuthenticatedUser();
 
   }, [])
+
+  const handlerSignOut = async () => {
+    setAuthUser(undefined);
+    await signOut();
+}
+
+
   return (
     <main className="flex min-h-screen flex-col p-6">
       {/* <div className={styles.shape} /> */}
@@ -39,7 +47,7 @@ export default function Home() {
 
         {
           (authUser) ?
-            <MenuUser user={authUser} />
+            <MenuUser user={authUser} handlerSignOut={handlerSignOut}/>
             :
             <Link
               href="/login"

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { AuthContext } from '../context/AuthContext';
 import { ApiUser } from '../lib/api/types/entities';
 import { redirectRoot } from '../lib/api/requests/auth-redirects';
@@ -22,7 +22,7 @@ function userAdmin(user: ApiUser): boolean {
     return _return;
 }
 
-export default function MenuUser({ user }: { user: ApiUser }) {
+export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, handlerSignOut: any }) {
     
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -36,21 +36,13 @@ export default function MenuUser({ user }: { user: ApiUser }) {
     ]: [];
 
     const { handleSubmit } = useForm();
-    const { signOut } = useContext(AuthContext);
+
 
     const toggle = () => {
         setIsOpen(old => !old);
     }
 
-    const transClass = isOpen
-        ?
-        "flex"
-        :
-        "hidden";
-
-    const handlerSignOut = async () => {
-        await signOut();
-    }
+    const transClass = isOpen ? "flex" : "hidden";
 
 
 
@@ -59,20 +51,20 @@ export default function MenuUser({ user }: { user: ApiUser }) {
             <div className="relative">
                 <button className="text-color-shop" onClick={toggle}>{user.nome}</button>
 
-                <div className={`absolute top-8 z-30 w-[250px] min-h-[300px] flex flex-col bg-color-shop  ${transClass}`}>
+                <div className={`absolute top-8 right-0 z-30 w-[150px] flex flex-col bg-color-shop-400  ${transClass}`}>
                     {
                         menuItems?.map(item =>
                             <Link
                                 key={item.route}
-                                className="hover:bg-black-300 hover:text-color-shop px-4 py-1"
+                                className="hover:bg-color-shop-400 text-color-shop px-4 py-1"
                                 href={item?.route || ''}
                                 onClick={toggle}
                             >{item.title}</Link>
                         )
                     }
                     <form onSubmit={handleSubmit(handlerSignOut)}>
-                        <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-                            <div className="hidden md:block">Sair</div>
+                        <button className="">
+                            <div className="hover:bg-color-shop-400 text-color-shop px-4 py-1">Sair</div>
                         </button>
                     </form>
                 </div>

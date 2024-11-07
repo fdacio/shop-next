@@ -25,6 +25,11 @@ input[type='number']::-webkit-outer-spin-button {
   background-color: black;
 }
 
+.bg-color-shop-400 {
+  background-color: rgb(56, 56, 56);
+}
+
+
 button.bg-color-shop:hover {
   background-color: rgb(128, 128, 128);
 }
