@@ -12,6 +12,7 @@ export default function RootLayout({
       {/* <body>{children}</body> */}
       <AuthProvider >
       <body className={`${inter.className} antialiased`}>{children}
+        VASCO DA GAMA
       </body>
       </AuthProvider>
     </html>

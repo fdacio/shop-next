@@ -6,7 +6,6 @@ import ApiMessageErro from './ui/api-messge-error';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { AuthContext } from './context/AuthContext';
 import { ApiUser } from './lib/api/types/entities';
 import { ApiError } from './lib/api/exceptions/ApiError';
@@ -41,7 +40,6 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col p-6">
-      {/* <div className={styles.shape} /> */}
       <div className="flex h-20 shrink-0 items-center justify-between rounded-md bg-color-shop p-4 md:h-40 ">
         <ShopLogo /> <p className='text-color-shop'>Bem Vindo ao Shop</p>
 

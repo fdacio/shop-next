@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { AuthContext } from '../context/AuthContext';
 import { ApiUser } from '../lib/api/types/entities';
 import { redirectRoot } from '../lib/api/requests/auth-redirects';
+import { PowerIcon } from '@heroicons/react/24/outline';
 
 export interface MenuItem {
     title: string;
@@ -23,19 +24,30 @@ function userAdmin(user: ApiUser): boolean {
 }
 
 export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, handlerSignOut: any }) {
-    
+
+    const { handleSubmit } = useForm();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const isAdmin = userAdmin(user);
 
-    const menuItems = (isAdmin) ? [
-        {
-            title: "Dashboard",
-            route: "/dashboard"
-        }
-    ]: [];
+    const routeDashboard = isAdmin ? {
+        title: "Dashboard",
+        route: "/dashboard"
+    } :
+        {};
 
-    const { handleSubmit } = useForm();
+    const menuItems = [
+        {
+            title: "Meus Dados",
+            route: "/profile/customers/edit"
+        },
+        {
+            title: "Alterar Senha",
+            route: "/profile/customers/password"
+        },
+        routeDashboard
+    ];
+
 
 
     const toggle = () => {
@@ -49,7 +61,15 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
     return (
         <>
             <div className="relative md:self-end">
-                <button className="text-white md:text-base" onClick={toggle}>{user.nomeSobrenome}</button>
+                <div className="flex flex-row gap-2">
+                    <button className="text-white md:text-base" onClick={toggle}>{user.nomeSobrenome}</button>
+                    <form onSubmit={handleSubmit(handlerSignOut)}>
+                        <button className="flex gap-2">
+                            <div className="hover:bg-color-shop-400 text-color-shop">Sair</div>
+                            <PowerIcon className="w-5 text-color-shop" />
+                        </button>
+                    </form>
+                </div>
 
                 <div className={`absolute top-8 right-0 z-30 w-[150px] flex flex-col bg-color-shop-400  ${transClass}`}>
                     {
@@ -62,11 +82,6 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
                             >{item.title}</Link>
                         )
                     }
-                    <form onSubmit={handleSubmit(handlerSignOut)}>
-                        <button className="">
-                            <div className="hover:bg-color-shop-400 text-color-shop px-4 py-1">Sair</div>
-                        </button>
-                    </form>
                 </div>
             </div>
             {

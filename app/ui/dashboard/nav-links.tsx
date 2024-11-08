@@ -22,32 +22,32 @@ const links = [
   },
   { 
     name: 'Dashboard', 
-    href: '/dashboard', 
+    href: '/administrative/dashboard', 
     icon: ChartBarSquareIcon 
   },
   {
     name: 'Products',
-    href: '/dashboard/products',
+    href: '/administrative/products',
     icon: TagIcon,
   },
   {
     name: 'Orders',
-    href: '/dashboard/orders',
+    href: '/administrative/orders',
     icon: DocumentDuplicateIcon,
   },
   { 
     name: 'Customers', 
-    href: '/dashboard/customers', 
+    href: '/administrative/customers', 
     icon: UserGroupIcon 
   },
   { 
     name: 'Users', 
-    href: '/dashboard/users', 
+    href: '/administrative/users', 
     icon: UsersIcon 
   },
   { 
     name: 'Settings', 
-    href: '/dashboard/settings', 
+    href: '/administrative/settings', 
     icon: Cog6ToothIcon 
   },
 ];

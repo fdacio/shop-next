@@ -8,7 +8,7 @@ export async function redirectAfterSignIn(user : ApiUser) {
 
 
         if (r.nome === 'Admin' || r.nome == 'Operator') {
-            redirect('/dashboard', RedirectType.push);
+            redirect('/administrative', RedirectType.push);
         }
 
         if (r.nome === 'Customer') {
