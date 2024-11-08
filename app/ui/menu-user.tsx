@@ -31,10 +31,12 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
     const isAdmin = userAdmin(user);
 
     const routeDashboard = isAdmin ? {
-        title: "Dashboard",
-        route: "/dashboard"
-    } :
-        {};
+        title: "Área Administrativa",
+        route: "/administrative"
+    } : {
+        title: "",
+        route: ""
+    }
 
     const menuItems = [
         {
@@ -76,7 +78,7 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
                         menuItems?.map(item =>
                             <Link
                                 key={item.route}
-                                className="hover:bg-color-shop-400 text-color-shop px-4 py-1"
+                                className="hover:bg-color-shop-400 text-color-shop text-sm px-4 py-1"
                                 href={item?.route || ''}
                                 onClick={toggle}
                             >{item.title}</Link>

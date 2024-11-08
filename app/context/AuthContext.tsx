@@ -1,5 +1,5 @@
 'use client'
-import { createCookie, clearCookie, getCookie } from '@/app/lib/cookies';
+import { clearCookie, getCookie } from '@/app/lib/cookies';
 import { createContext } from "react";
 import { redirectAfterSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
 import { useApiPostSSR } from "../lib/api/requests/ssr/useApiPost";
@@ -7,7 +7,7 @@ import { useApiPost } from "../lib/api/requests/csr/useApiPost";
 import { ApiUser, Token } from "../lib/api/types/entities";
 import { ApiAuthError } from '../lib/api/exceptions/ApiAuthError';
 import { destroyCookie, setCookie } from 'nookies';
-import { NextResponse } from 'next/server';
+
 
 
 type AuthContextType = {
@@ -57,9 +57,9 @@ export function AuthProvider({ children }: any) {
 
     //Funcao do logout que faz o logout
     async function signOut() {
-        destroyCookie(undefined, 'shop.token');
+        //destroyCookie(undefined, 'shop.token');
         //NextResponse.redirect(new URL('/'));
-        //await clearCookie("shop.token");
+        await clearCookie("shop.token");
         await redirectSignOut();
     }
 
