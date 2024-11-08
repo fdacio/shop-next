@@ -53,7 +53,7 @@ export default function Home() {
               href="/login"
               className="flex items-center gap-5 md:self-end bg-color-shop text-sm font-medium text-color-shop transition-colors text-center md:text-base"
             >
-              <span>Entrar</span> <ArrowRightIcon className="w-5 md:w-6 text-color" />
+              <span>Entrar</span> <ArrowRightIcon className="w-5 md:w-6 " />
             </Link >
 
         }

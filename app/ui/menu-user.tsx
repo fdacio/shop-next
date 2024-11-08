@@ -48,8 +48,8 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
 
     return (
         <>
-            <div className="relative">
-                <button className="text-color-shop" onClick={toggle}>{user.nome}</button>
+            <div className="relative md:self-end">
+                <button className="text-white md:text-base" onClick={toggle}>{user.nomeSobrenome}</button>
 
                 <div className={`absolute top-8 right-0 z-30 w-[150px] flex flex-col bg-color-shop-400  ${transClass}`}>
                     {

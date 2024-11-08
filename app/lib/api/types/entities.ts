@@ -2,6 +2,7 @@
 export type ApiUser = {
   id: string;
   nome: string;
+  nomeSobrenome: string,
   username: string,
   email: string;
   password: string;

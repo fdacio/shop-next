@@ -42,7 +42,7 @@ export default function SideNav() {
         {
           (authUser) &&
             <div className="text-sm text-color-shop justify-start">
-              <p>{authUser?.nome}</p>
+              <p>{authUser?.nomeSobrenome}</p>
             </div>
         }
           <ShopLogo />
