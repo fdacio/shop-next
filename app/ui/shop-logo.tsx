@@ -7,7 +7,7 @@ export default function ShopLogo() {
       className={`${roboto.className} flex flex-row items-center leading-none text-color-yellow`}
     >
       <ShoppingCartIcon className="h-10 w-10 text-color-shop" />
-      <p className="text-[36px] text-color-shop">Shop</p>
+      <p className="text-[36px] text-yellow-500">Shop</p>
     </div>
   );
 }
