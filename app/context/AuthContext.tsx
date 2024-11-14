@@ -1,13 +1,11 @@
 'use client'
-import { clearCookie, getCookie } from '@/app/lib/cookies';
+import { clearCookie, getCookie, createCookie } from '@/app/lib/cookies';
 import { createContext } from "react";
 import { redirectAfterSignIn, redirectSignOut } from '../lib/api/requests/auth-redirects';
 import { useApiPostSSR } from "../lib/api/requests/ssr/useApiPost";
 import { useApiPost } from "../lib/api/requests/csr/useApiPost";
 import { ApiUser, Token } from "../lib/api/types/entities";
 import { ApiAuthError } from '../lib/api/exceptions/ApiAuthError';
-import { destroyCookie, setCookie } from 'nookies';
-
 
 
 type AuthContextType = {
@@ -27,8 +25,7 @@ export function AuthProvider({ children }: any) {
 
     async function signIn({ email: username, password }: SignInData) {
 
-        destroyCookie(undefined, 'shop.token');
-        //await clearCookie("shop.token");
+        await clearCookie("shop.token");
 
         let data = {
             "username": username,
@@ -42,8 +39,7 @@ export function AuthProvider({ children }: any) {
         }
 
         if (dataToken) {
-            setCookie(undefined, 'shop.token', dataToken.token);
-            //await createCookie('shop.token', token?.token);
+            await createCookie('shop.token', dataToken.token);
         }
 
         const { data: user, error: errorGetUser } = await useApiPostSSR<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + dataToken.token } });
@@ -55,10 +51,8 @@ export function AuthProvider({ children }: any) {
 
     }
 
-    //Funcao do logout que faz o logout
+    //Funcao signOut que faz o logout
     async function signOut() {
-        //destroyCookie(undefined, 'shop.token');
-        //NextResponse.redirect(new URL('/'));
         await clearCookie("shop.token");
         await redirectSignOut();
     }
@@ -66,7 +60,6 @@ export function AuthProvider({ children }: any) {
     //Função que retorna os dados do usuário logado
     async function authenticatedUser() {
 
-        //const { 'shop.token': token } = parseCookies();
         const cookieToken = await getCookie('shop.token');
         const token = cookieToken?.value;
 

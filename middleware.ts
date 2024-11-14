@@ -2,15 +2,20 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { useApiPostSSR } from './app/lib/api/requests/ssr/useApiPost';
 import { ApiUser } from './app/lib/api/types/entities';
+import { getCookie } from './app/lib/cookies';
 
 export async function middleware(request: NextRequest) {
 
     const { pathname } = request.nextUrl;
-    const token = request.cookies.get('shop.token');
 
-    if (token?.value) {
+    //const token = request.cookies.get('shop.token');
+    const cookieToken = await getCookie('shop.token');
+    const token = cookieToken?.value;
 
-        const user = await authenticatedUser(token.value);
+
+    if (token) {
+
+        const user = await authenticatedUser(token);
 
         if (user) {            
 
@@ -21,7 +26,7 @@ export async function middleware(request: NextRequest) {
 
             if (isCustomer) return NextResponse.redirect(new URL('/', request.url));
 
-            if (isRouterLogin && (isAdmin || isOperator)) return NextResponse.redirect(new URL('/dashboard', request.url));
+            if (isRouterLogin && (isAdmin || isOperator)) return NextResponse.redirect(new URL('/administrative', request.url));
 
             if (isRouterLogin && (isCustomer)) return NextResponse.redirect(new URL('/', request.url));
 
@@ -36,15 +41,12 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
 
-    } else {
-        
-        return NextResponse.redirect(new URL('/login', request.url));
-    }
+    } 
 }
 
 // quando chamadas são para as rotas de dashboard dispara o  middleware
 export const config = {
-    matcher: ['/dashboard/:path*'],
+    matcher: ['/administrative/:path*'],
 }
 
 async function authenticatedUser(token: string) {

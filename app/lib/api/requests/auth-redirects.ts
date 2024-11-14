@@ -6,28 +6,26 @@ export async function redirectAfterSignIn(user : ApiUser) {
 
     user?.rules?.map((r: { nome: string; }) => {
 
-
         if (r.nome === 'Admin' || r.nome == 'Operator') {
-            redirect('/administrative', RedirectType.push);
+            redirect('/administrative', RedirectType.replace);
         }
 
         if (r.nome === 'Customer') {
-            redirect('/', RedirectType.push);
+            redirect('/', RedirectType.replace);
         }
+        
     })
 
 }
 
 export async function redirectSignOut() {
-    redirect("/", RedirectType.push);
-    //NextResponse.redirect(new URL('/'));
+    redirect("/", RedirectType.replace);
 }
 
 export async function redirectRoot() {
-    redirect("/", RedirectType.push);
-    //return NextResponse.redirect(new URL('/'));
+    redirect("/", RedirectType.replace);
 }
 
 export async function redirectLogin() {
-    redirect("/login");
+    redirect("/login", RedirectType.replace);
 }
