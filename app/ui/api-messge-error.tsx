@@ -2,10 +2,10 @@ export default function ApiMessageErro({ message } : { message : string | undefi
 
 
     return (
-        <>
+        <p className="text-red-500 text-sm">
             {
-                (message?.toString != null) && <div>{message}</div>
+                (message) && message
             }
-        </>
+        </p>
     )
 }

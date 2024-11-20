@@ -48,10 +48,11 @@ export type Config = {
 }
 
 export type ApiResponseType = {
-  data : any,
-  loading : boolean,
-  error : ApiResponseError | undefined,
-  success : ApiResponseSuccess | undefined,
+  data? : any | undefined,
+  loading? : boolean,
+  error? : ApiResponseError | undefined,
+  success? : ApiResponseSuccess | undefined,
+  handlePost?: any | undefined 
 }
 
 export type ApiResponse = {

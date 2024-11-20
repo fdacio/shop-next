@@ -1,6 +1,6 @@
 import { ClockIcon } from "@heroicons/react/24/outline";
 
-export default function Loading({ isLoading }: { isLoading: boolean }) {
+export default function Loading({ isLoading }: { isLoading: boolean | undefined}) {
 
     return (
         <div className="p-4">

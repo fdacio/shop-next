@@ -25,11 +25,11 @@ export default function SideNav() {
       try {
         const user = await authenticatedUser();
         if (user) setAuthUser(user);
-      } catch(error) {
+      } catch (error) {
         setAuthUser(undefined);
       }
     }
-    
+
     handleAuthenticatedUser();
 
   }, [])
@@ -37,17 +37,17 @@ export default function SideNav() {
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
-      <div className="mb-2 flex h-20 items-end justify-start rounded-md bg-color-shop p-4 md:h-40">
-        <div className="flex flex-col w-32 md:w-40">
-        {
-          (authUser) &&
-            <div className="text-sm text-color-shop justify-start">
+      <div className="mb-2 flex h-20 justify-start rounded-md bg-black-500 p-4 md:h-40">
+        <div className="flex flex-col justify-between w-full">
+          <ShopLogo />
+          {
+            (authUser) &&
+            <div className="text-sm text-yellow-500 self-end">
               <p>{authUser?.nomeSobrenome}</p>
             </div>
-        }
-          <ShopLogo />
+          }
         </div>
-        </div>
+      </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block">

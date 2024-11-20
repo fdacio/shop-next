@@ -59,13 +59,13 @@ axiosInstance.interceptors.response.use((response) => {
 
 					let cookieToken = await getCookie("shop.token");
 					let invalidToken = cookieToken?.value;
-					await clearCookie("shop.token");
-			
+					//await clearCookie("shop.token");
+
 					const dataToken = {
 						token: invalidToken,
 						expired: undefined
 					}
-					
+
 					//Obtem o novo token - request side sever
 					const response = await useApiPostSSR<Token>('/auth/refresh-token', dataToken, { withCredentials: false });
 

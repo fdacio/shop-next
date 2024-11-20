@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
     const cookieToken = await getCookie('shop.token');
     const token = cookieToken?.value;
 
-
     if (token) {
 
         const user = await authenticatedUser(token);
@@ -46,7 +45,7 @@ export async function middleware(request: NextRequest) {
 
 // quando chamadas são para as rotas de dashboard dispara o  middleware
 export const config = {
-    matcher: ['/administrative/:path*'],
+    matcher: ['/administrative/:path*', '/profile/customers/:path*'],
 }
 
 async function authenticatedUser(token: string) {

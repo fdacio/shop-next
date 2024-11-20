@@ -12,7 +12,7 @@ export default function ProductsCardHome({ product }: { product: Product }) {
         if(!pathPhoto) srcPhoto = PlaceholderPhotoProduct;
         else srcPhoto = pathPhoto
         
-        return (<Image src={PlaceholderPhotoProduct} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" alt="Imagem do produto" ></Image>) ;
+        return (<Image src={PlaceholderPhotoProduct} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" alt="Imagem do produto" priority={true}></Image>) ;
     }
 
     return (
