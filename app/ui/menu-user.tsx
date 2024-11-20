@@ -28,16 +28,6 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
 
     const isAdmin = userAdmin(user);
 
-    const routeDashboard = isAdmin ? {
-        key: 1,
-        title: "Administrativo",
-        route: "/administrative"
-    } : {
-        key: 1,
-        title: "",
-        route: ""
-    }
-
     const menuItems = [
         {
             key: 2,
@@ -48,9 +38,16 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
             key: 3,
             title: "Alterar Senha",
             route: "/profile/customers/password"
-        },
-        routeDashboard
+        }
     ];
+
+    if (isAdmin) {
+        menuItems[menuItems.length] = {
+            key: 1,
+            title: "Administrativo",
+            route: "/administrative"
+        }
+    }
 
     const toggle = () => {
         setIsOpen(old => !old);
@@ -66,7 +63,7 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
                     <div className="relative">
                         <button className="text-white md:text-base hover:bg-black-400 flex gap-2 p-1 items-center" onClick={toggle}>
                             <p>{user.nomeSobrenome}</p>
-                            <ChevronDownIcon className='w-4'/>
+                            <ChevronDownIcon className='w-4' />
                         </button>
                         <div className={`absolute top-8 right-0 z-30 w-[150px] flex flex-col bg-black-500 ${transClass}`}>
                             {
@@ -76,8 +73,8 @@ export default function MenuUser({ user, handlerSignOut }: { user: ApiUser, hand
                                         className={`hover:bg-black-400 text-yellow-400 text-sm px-4 py-1 ${(item.key == 1) ? 'border-t border-gray-500' : ''}`}
                                         href={item?.route || ''}
                                         onClick={toggle}
-                                        >                                        
-                                        {item.title}  
+                                    >
+                                        {item.title}
                                     </Link>
                                 )
                             }

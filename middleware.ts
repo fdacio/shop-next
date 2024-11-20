@@ -19,11 +19,12 @@ export async function middleware(request: NextRequest) {
         if (user) {            
 
             const isRouterLogin = pathname.startsWith('/login');
+            const isRouterProfileCustomer = pathname.startsWith('/profile/customers');
             const isAdmin = userAdmin(user);
             const isOperator = userOperator(user);
             const isCustomer = userCustomer(user);
 
-            if (isCustomer) return NextResponse.redirect(new URL('/', request.url));
+            if (isCustomer && !isRouterProfileCustomer) return NextResponse.redirect(new URL('/', request.url));
 
             if (isRouterLogin && (isAdmin || isOperator)) return NextResponse.redirect(new URL('/administrative', request.url));
 

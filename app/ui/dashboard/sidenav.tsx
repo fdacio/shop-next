@@ -1,38 +1,35 @@
 'use client'
-import Link from 'next/link';
+
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import ShopLogo from '@/app/ui/shop-logo';
+import { parseCookies } from "nookies"
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { AuthContext } from '@/app/context/AuthContext';
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ApiUser } from '@/app/lib/api/types/entities';
-
+import { useApiPost } from '@/app/lib/api/requests/csr/useApiPost';
 
 export default function SideNav() {
 
-  const { signOut, authenticatedUser } = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
   const { handleSubmit } = useForm();
   const [authUser, setAuthUser] = useState<ApiUser | undefined>(undefined);
+
+  const { 'shop.token': accessToken } = parseCookies(undefined);
+  const { handlePost } = useApiPost<ApiUser>("auth/user/authenticated", {}, { headers: { 'Authorization': 'Bearer ' + accessToken } });
+
+  useEffect(() => {
+      const callPost = async () => {
+          const { data: user } = await handlePost();
+          setAuthUser(user);
+      }
+      callPost();
+  }, []);
 
   const handlerSignOut = async () => {
     await signOut();
   }
-
-  useEffect(() => {
-
-    const handleAuthenticatedUser = async () => {
-      try {
-        const user = await authenticatedUser();
-        if (user) setAuthUser(user);
-      } catch (error) {
-        setAuthUser(undefined);
-      }
-    }
-
-    handleAuthenticatedUser();
-
-  }, [])
 
 
   return (

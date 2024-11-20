@@ -48,7 +48,7 @@ export const useApiGet = <T = unknown>(url: string, options = {}): ApiResponseTy
 
         handlerGet();
 
-    }, [url])
+    }, [])
 
     return { data, loading, success, error }
 

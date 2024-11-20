@@ -12,8 +12,13 @@ export default function ProductsHome() {
 
     return (
         <div className={styles.container}>
-            <ApiMessageErro message={apiError?.message} />            
-            <Loading isLoading={loading} />
+            {
+                (apiError) &&
+                <ApiMessageErro message={apiError?.message} />
+            }
+            {   (loading) &&
+                <Loading isLoading={loading} />
+            }
             {products?.map((product: Product) => {
                 return (
                     <ProductsCardHome product={product} key={product.id.toString()} />
