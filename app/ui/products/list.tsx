@@ -1,4 +1,5 @@
 import { Product } from "@/app/lib/api/types/entities"
+import { formatDateTime, formatMoney } from '@/app/lib/formated';
 
 export default function List({ data: products }: { data: Product[] | undefined }) {
 
@@ -18,7 +19,7 @@ export default function List({ data: products }: { data: Product[] | undefined }
                         <tr key={product.id}>
                             <td className="text-right border p-1">{product.id}</td>
                             <td className="text-left border p-1">{product.nome}</td>
-                            <td className="text-right border p-1">{product.preco}</td>
+                            <td className="text-right border p-1">{formatMoney(product.preco)}</td>
                         </tr>
                     )
                 }

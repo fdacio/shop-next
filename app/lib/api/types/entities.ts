@@ -32,12 +32,15 @@ export type Customer = {
   id: string;
   nome: string;
   email: string;
+  telefone: string;
+  cpf: string;
 };
 
 export type Order = {
   id: string;
   customer: Customer;
   data: string;
+  total: number;
   //status: 'pending' | 'paid';
 };
 

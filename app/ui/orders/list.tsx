@@ -1,4 +1,5 @@
 import { Order } from "@/app/lib/api/types/entities"
+import { formatDateTime, formatMoney } from '@/app/lib/formated';
 
 export default function List({ data : orders }: { data: Order[] | undefined }) {
     
@@ -9,6 +10,7 @@ export default function List({ data : orders }: { data: Order[] | undefined }) {
                     <th className="text-left border p-1">ID</th>
                     <th className="text-left border p-1">Date/Hour</th>
                     <th className="text-left border p-1">Customer</th>
+                    <th className="text-left border p-1">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,8 +18,9 @@ export default function List({ data : orders }: { data: Order[] | undefined }) {
                 return (
                     <tr key={order.id}>
                         <td className="text-right border p-1">{order.id}</td>  
-                        <td className="text-left border p-1">{order.data}</td>
+                        <td className="text-left border p-1">{formatDateTime(order.data)}</td>
                         <td className="text-left border p-1">{order.customer.nome}</td>
+                        <td className="text-right border p-1">{formatMoney(order.total)}</td>
                     </tr>
                 )
             }

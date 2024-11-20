@@ -80,7 +80,7 @@ export default function LoginForm() {
 						</div>
 					</div>
 				</div>
-				<Button className="mt-4 w-full bg-color-shop text-color-shop" disabled={isLoading}>
+				<Button className="mt-4 w-full bg-color-black-500 text-yellow-500" disabled={isLoading}>
 					{
 						(!isLoading)
 							?
